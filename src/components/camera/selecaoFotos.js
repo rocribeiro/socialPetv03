@@ -44,7 +44,7 @@ myfun=()=>{
             <TouchableOpacity style={{backgroundColor:'green',margin:10,padding:10}} onPress={this.myfun}>
                 <Text style={{color:'#fff'}}>Selecionar Foto do Pet</Text>
             </TouchableOpacity>
-            <Image source={this.state.avatarSource} style={{width:200,height:200,margin:10}}/>
+            <Image source={this.state.avatarSource} style={{width:50,height:50,margin:10}}/>
         </View>
     );
   }
