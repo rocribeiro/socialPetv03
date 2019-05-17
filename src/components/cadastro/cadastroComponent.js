@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import { View,TextInput, Button} from 'react-native';
 import Photo from '../camera/selecaoFotos'
@@ -18,6 +19,24 @@ export default class cadastro extends Component {
       dono:'1'
     };
   }
+  retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('base64');
+      if (value !== null) {
+        this.setState = {
+          nome:'Cão',
+          tipo:'Cachorro',
+          raca:'Fura Saco',
+          perdido:'Sim',
+          descricao:'imsdiemdim23idm43idmi4mid4m',
+          foto:value,
+          dono:'1'
+        };
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
     render() {
         return(
             <View>
@@ -54,7 +73,7 @@ export default class cadastro extends Component {
       }
 
       myfun=()=>{
-        alert(Photo.prototype.state.avatarSource);
+        alert(this.state.foto);
         fetch('http://192.168.15.13:8080/pet/addPet', {
           method: 'POST',
           headers: {
@@ -67,7 +86,7 @@ export default class cadastro extends Component {
             raca:this.state.raca,
             perdido:this.state.perdido,
             descricao:this.state.descricao,
-            foto: Photo.props.state.avatarSource,
+            foto: this.state.foto,
             dono:"1"
           }),
         });
