@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View} from "react-native";
 import MapView from "react-native-maps";
+import { Marker } from 'react-native-maps';
 
 import {
   Container,
@@ -42,12 +43,27 @@ export default class Map extends Component {
     const {navigate} = this.props.navigation;
     return (
       <View style={{ flex: 1 }}>
-        <MapView
-          style={{ flex: 1 }}
-          region={region}
-          showsUserLocation
-          loadingEnabled
+        <MapView style={{ flex: 1 }} region={region} showsUserLocation loadingEnabled>
+        <MapView.Marker
+            coordinate={{latitude: -9.01 ,
+            longitude: -35.22}}
+            title={"perdido"}
+            description={"Tartaruga, Perdida"}
          />
+         <MapView.Marker
+            coordinate={{latitude:-28.52 ,
+            longitude: -52.99}}
+            title={"Perdido"}
+            description={"Cachorro,perdido"}
+         />
+         <MapView.Marker
+            coordinate={{latitude:-23.54 ,
+            longitude: -46.63}}
+            title={"Achado"}
+            description={"Gato, Achado"}
+            pinColor='#64FE2E'
+         />
+        </MapView>
         <Container>
           <RequestButton onPress={() =>  navigate('Cadastro')}>
             <RequestButtonText>Perdi Meu Pet</RequestButtonText>
