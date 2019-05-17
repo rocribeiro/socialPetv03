@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
 
 import { View,TextInput, Button} from 'react-native';
 import Photo from '../camera/selecaoFotos'
@@ -15,28 +14,35 @@ export default class cadastro extends Component {
       raca:'Fura Saco',
       perdido:'Sim',
       descricao:'imsdiemdim23idm43idmi4mid4m',
+      latitudePerdido:'',
+      longitudePerdido:'',
       foto:'',
-      dono:'1'
+      dono:''
     };
   }
-  retrieveData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('base64');
-      if (value !== null) {
-        this.setState = {
+  async componentDidMount() {
+    navigator.geolocation.getCurrentPosition(
+      async ({ coords: { latitude, longitude } }) => {
+        this.setState({
           nome:'Cão',
           tipo:'Cachorro',
           raca:'Fura Saco',
-          perdido:'Sim',
+          perdido:'',
           descricao:'imsdiemdim23idm43idmi4mid4m',
-          foto:value,
-          dono:'1'
-        };
+          latitudePerdido:latitude,
+          longitudePerdido:longitude,
+          foto:'',
+          dono:null
+        });
+      }, //sucesso
+      () => {}, //erro
+      {
+        timeout:2000,//tempo em que vai ficar tentando pegar a location caso n'ao consiga vai retornar erro.
+        enableHighAccuracy:true,//serve para pegar a location via gps pois e melhor mais detalhada
+        maximumAge:1000 //cache para quardar a location do usuario
       }
-    } catch (error) {
-      alert(error);
-    }
-  };
+    );
+  }
     render() {
         return(
             <View>
@@ -73,21 +79,32 @@ export default class cadastro extends Component {
       }
 
       myfun=()=>{
-        alert(this.state.foto);
-        fetch('http://192.168.15.13:8080/pet/addPet', {
+        fetch('http://192.168.22.135:8080/dono/addDono', {
           method: 'POST',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            nome: this.state.nome,
-            tipo:this.state.tipo,
-            raca:this.state.raca,
-            perdido:this.state.perdido,
-            descricao:this.state.descricao,
-            foto: this.state.foto,
-            dono:"1"
+              nome:'oooooo',
+              endereco:{
+                  rua:'reeeee',
+                  cep:'444444444',
+                  numero:'333',
+                  complemento:'iejeijeie'
+              },
+              email:'eeee',
+              celular:'888888',
+              pets:[{
+                nome: this.state.nome,
+                tipo:this.state.tipo,
+                raca:this.state.raca,
+                perdido:this.state.perdido,
+                descricao:this.state.descricao,
+                latitudePerdido:this.state.latitudePerdido,
+                longitudePerdido:this.state.longitudePerdido,
+                foto: this.state.foto,
+              }]
           }),
         });
       }
