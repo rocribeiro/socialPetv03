@@ -13,7 +13,8 @@ import {
 
 export default class Map extends Component {
   state = {
-    region: null
+    region: null,
+    pets:[]
   };
 
   async componentDidMount() {
@@ -37,6 +38,17 @@ export default class Map extends Component {
     );
   }
 
+  async petsLost() {
+    try {
+      const response = await fetch("http://localhost:8080/pet/");
+      const { pets } = response.data;
+      this.setState({ pets });
+    } catch (error) {
+      this.setState({ errorMessage: err.data.error });
+    }
+   
+  }
+
 
   render() {
     const { region } = this.state;
@@ -50,23 +62,23 @@ export default class Map extends Component {
             title={"perdido"}
             description={"Tartaruga, Perdida"}
          />
-         <MapView.Marker
-            coordinate={{latitude:-28.52 ,
-            longitude: -52.99}}
-            title={"Perdido"}
-            description={"Cachorro,perdido"}
-         />
-         <MapView.Marker
-            coordinate={{latitude:-23.54 ,
-            longitude: -46.63}}
-            title={"Achado"}
-            description={"Gato, Achado"}
-            pinColor='#64FE2E'
-         />
+        {this.state.pets.map(pet =>(
+            <view key={pet.id}>
+              <MapView.Marker
+                coordinate={{latitude: pet.latitudePerdido,
+                  longitude: pet.longitude_perdido}}
+                  title={pet.nome}
+                  description={pet.descricao}
+              />
+            </view>
+        ))}
         </MapView>
         <Container>
           <RequestButton onPress={() =>  navigate('Cadastro')}>
             <RequestButtonText>Perdi Meu Pet</RequestButtonText>
+          </RequestButton>
+          <RequestButton onPress={this.petsLost}>
+            <RequestButtonText>Pets Lost</RequestButtonText>
           </RequestButton>
         </Container>
       </View>

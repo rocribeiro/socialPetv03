@@ -22,17 +22,10 @@ export default class cadastro extends Component {
   }
   async componentDidMount() {
     navigator.geolocation.getCurrentPosition(
-      async ({ coords: { latitude, longitude } }) => {
+      async ({ coords: { latitudePerdido, longitudePerdido } }) => {
         this.setState({
-          nome:'Cão',
-          tipo:'Cachorro',
-          raca:'Fura Saco',
-          perdido:'',
-          descricao:'imsdiemdim23idm43idmi4mid4m',
-          latitudePerdido:latitude,
-          longitudePerdido:longitude,
-          foto:'',
-          dono:null
+          latitudePerdido,
+          longitudePerdido
         });
       }, //sucesso
       () => {}, //erro
@@ -79,23 +72,13 @@ export default class cadastro extends Component {
       }
 
       myfun=()=>{
-        fetch('http://192.168.22.135:8080/dono/addDono', {
+        fetch('http://localhost:8080/pet/addPet', {
           method: 'POST',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-              nome:'oooooo',
-              endereco:{
-                  rua:'reeeee',
-                  cep:'444444444',
-                  numero:'333',
-                  complemento:'iejeijeie'
-              },
-              email:'eeee',
-              celular:'888888',
-              pets:[{
                 nome: this.state.nome,
                 tipo:this.state.tipo,
                 raca:this.state.raca,
@@ -104,7 +87,6 @@ export default class cadastro extends Component {
                 latitudePerdido:this.state.latitudePerdido,
                 longitudePerdido:this.state.longitudePerdido,
                 foto: this.state.foto,
-              }]
           }),
         });
       }
