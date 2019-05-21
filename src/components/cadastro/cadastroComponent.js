@@ -25,17 +25,11 @@ export default class cadastro extends Component {
    componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       async ({ coords: { latitude, longitude } }) => {
-        alert(position.coords.latitude); 
+        alert(latitude); 
         this.setState({
           latitudePerdido:latitude,
           longitudePerdido:longitude,
         });
-      }, //sucesso
-      () => {}, //erro
-      {
-        timeout:2000,//tempo em que vai ficar tentando pegar a location caso n'ao consiga vai retornar erro.
-        enableHighAccuracy:true,//serve para pegar a location via gps pois e melhor mais detalhada
-        maximumAge:1000 //cache para quardar a location do usuario
       }
     );
    
