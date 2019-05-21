@@ -16,20 +16,20 @@ export default class cadastro extends Component {
       raca:'Fura Saco',
       perdido:true,
       descricao:'imsdiemdim23idm43idmi4mid4m',
-      latitudePerdido:'',
-      longitudePerdido:'',
-      foto:'',
+      latitudePerdido:null,
+      longitudePerdido:null,
+      foto:null,
       dono:''
     };
   }
    componentDidMount() {
     navigator.geolocation.getCurrentPosition(
-      (position) => {
-          this.setState({
-            latitudePerdido: parseFloat(position.coords.latitude),
-            longitudePerdido:  parseFloat(position.coords.longitude)
-          });
-          alert(position.coords.latitude);
+      async ({ coords: { latitude, longitude } }) => {
+        alert(position.coords.latitude); 
+        this.setState({
+          latitudePerdido:latitude,
+          longitudePerdido:longitude,
+        });
       }, //sucesso
       () => {}, //erro
       {
@@ -83,7 +83,6 @@ export default class cadastro extends Component {
       }
 
       myfun=()=>{
-        alert(this.state.foto);
         axios({
           method: 'post',
           url: 'http://192.168.22.135:8080/pet/addPet',
