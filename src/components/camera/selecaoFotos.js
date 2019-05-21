@@ -19,13 +19,6 @@ export default class camera extends Component<Props> {
             avatarSource:null
         }
     }
-    storeData = async () => {
-      try {
-        await AsyncStorage.setItem('base64', this.state.avatarSource);
-      } catch (error) {
-        // Error saving data
-      }
-    };
 myfun=()=>{
     ImagePicker.showImagePicker(options, (response) => {
         console.log('Response = ', response);
@@ -46,7 +39,15 @@ myfun=()=>{
         }
       });
 }
-
+componentDidMount(){
+  storeData = async () => {
+    try {
+      await AsyncStorage.setItem('base64', this.state.avatarSource)
+    } catch (e) {
+      // saving error
+    }
+  }
+}
 
 
   render() {

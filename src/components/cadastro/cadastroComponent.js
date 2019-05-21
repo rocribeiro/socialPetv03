@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import { View,TextInput, Button} from 'react-native';
 import Photo from '../camera/selecaoFotos'
+import AsyncStorage from '@react-native-community/async-storage';
+import axios from 'react-native-axios'
 
 // import { Container } from './styles';
 
@@ -12,7 +14,7 @@ export default class cadastro extends Component {
       nome:'Cão',
       tipo:'Cachorro',
       raca:'Fura Saco',
-      perdido:'Sim',
+      perdido:true,
       descricao:'imsdiemdim23idm43idmi4mid4m',
       latitudePerdido:'',
       longitudePerdido:'',
@@ -20,13 +22,14 @@ export default class cadastro extends Component {
       dono:''
     };
   }
-  async componentDidMount() {
+   componentDidMount() {
     navigator.geolocation.getCurrentPosition(
-      async ({ coords: { latitudePerdido, longitudePerdido } }) => {
-        this.setState({
-          latitudePerdido,
-          longitudePerdido
-        });
+      (position) => {
+          this.setState({
+            latitudePerdido: parseFloat(position.coords.latitude),
+            longitudePerdido:  parseFloat(position.coords.longitude)
+          });
+          alert(position.coords.latitude);
       }, //sucesso
       () => {}, //erro
       {
@@ -35,6 +38,19 @@ export default class cadastro extends Component {
         maximumAge:1000 //cache para quardar a location do usuario
       }
     );
+   
+  }
+  
+  getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('base64')
+      if(value !== null) {
+        this.setState({ foto: value })
+        alert(this.state.foto);
+      }
+    } catch(e) {
+      // error reading value
+    }
   }
     render() {
         return(
@@ -55,11 +71,6 @@ export default class cadastro extends Component {
                   placeholder="Raça"
                 />
                 <TextInput
-                  value={this.state.perdido}
-                  onChangeText={perdido => this.setState({perdido})}
-                  placeholder="Perdido?"
-                />
-                <TextInput
                   multiline={true}
                   numberOfLines={4}
                   value={this.state.descricao}
@@ -72,22 +83,21 @@ export default class cadastro extends Component {
       }
 
       myfun=()=>{
-        fetch('http://localhost:8080/pet/addPet', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
+        alert(this.state.foto);
+        axios({
+          method: 'post',
+          url: 'http://192.168.22.135:8080/pet/addPet',
+          data: {
+            nome: this.state.nome,
+            tipo:this.state.tipo,
+            raca:this.state.raca,
+            perdido:this.state.perdido,
+            descricao:this.state.descricao,
+            latitudePerdido:this.state.latitudePerdido,
+            longitudePerdido:this.state.longitudePerdido,
+            foto: this.state.foto
           },
-          body: JSON.stringify({
-                nome: this.state.nome,
-                tipo:this.state.tipo,
-                raca:this.state.raca,
-                perdido:this.state.perdido,
-                descricao:this.state.descricao,
-                latitudePerdido:this.state.latitudePerdido,
-                longitudePerdido:this.state.longitudePerdido,
-                foto: this.state.foto,
-          }),
+          headers: {'Content-Type': 'application/json'}
         });
       }
 }
