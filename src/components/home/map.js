@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { View} from "react-native";
 import MapView from "react-native-maps";
+import { Marker } from 'react-native-maps';
+import axios from 'react-native-axios'
 
 import {
   Container,
@@ -12,10 +14,11 @@ import {
 
 export default class Map extends Component {
   state = {
-    region: null
+    region: null,
+    pets:[]
   };
 
-  async componentDidMount() {
+   componentDidMount(){
     navigator.geolocation.getCurrentPosition(
       async ({ coords: { latitude, longitude } }) => {
         this.setState({
@@ -34,20 +37,28 @@ export default class Map extends Component {
         maximumAge:1000 //cache para quardar a location do usuario
       }
     );
-  }
 
+      axios.get('http://192.168.22.135:8080/pet/')
+      .then(response => this.setState({ pets: response.data }));
+  }
+  
 
   render() {
     const { region } = this.state;
     const {navigate} = this.props.navigation;
     return (
       <View style={{ flex: 1 }}>
-        <MapView
-          style={{ flex: 1 }}
-          region={region}
-          showsUserLocation
-          loadingEnabled
-         />
+        <MapView style={{ flex: 1 }} region={region} showsUserLocation loadingEnabled>
+        {this.state.pets.map(pet =>(
+              <MapView.Marker
+                coordinate={{latitude: pet.latitudePerdido,
+                  longitude: pet.longitudePerdido}}
+                  title={pet.nome}
+                  description={pet.descricao}
+                  key={pet.id}
+              />
+        ))}
+        </MapView>
         <Container>
           <RequestButton onPress={() =>  navigate('Cadastro')}>
             <RequestButtonText>Perdi Meu Pet</RequestButtonText>
