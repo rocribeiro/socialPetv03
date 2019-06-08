@@ -12,7 +12,7 @@ const options = {
 
   
 
-export default class camera extends Component<Props> {
+export default class camera extends Component {
     constructor(props){
         super(props)
         this.state={
