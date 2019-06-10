@@ -21,6 +21,10 @@ export default class Map extends Component {
       region: null,
       pets: [],
       modalVisible: false,
+      dono:{
+        nome:navigation.getParam('nome'),
+        email:navigation.getParam('email')
+      },
       petModal:{
         nome:null,
         descricao:null,
@@ -96,7 +100,7 @@ export default class Map extends Component {
               <TypeTitle>Raça</TypeTitle>
               <TextModal>{this.state.petModal.raca}</TextModal>
               <TypeTitle>Contato</TypeTitle>
-              <TextModal>Email: Rodrigo.ribeiro@gmail.com</TextModal>
+              <TextModal>Email:{this.state.dono.email} </TextModal>
               <TextModal>Celular: 99289-8366</TextModal>
               <TextModal>Falar com: Rodrigo</TextModal>
               <RequestButton onPress={() => {this.setModalVisible(!this.state.modalVisible);}}>

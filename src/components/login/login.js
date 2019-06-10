@@ -8,7 +8,10 @@ import {
     GraphRequestManager,
     GraphRequest
   } from 'react-native-fbsdk';
-export default class camera extends Component{
+export default class Login extends Component{
+    constructor(props) {
+        super(props);
+      }
 _fbAuth(){
     var that = this;
     LoginManager.logInWithReadPermissions(['public_profile','email']).then(function(result){
@@ -27,7 +30,9 @@ _fbAuth(){
                                 if(result.email == undefined){
                                     Alert.alert('Error'+ 'Necessario email valido');
                                 }else{//sucesso
-                                    Alert.alert('Nome:'+result.name + '\nemail'+result.email);
+
+                                    that.props.navigation.navigate("Home");
+                                   // Alert.alert('Nome:'+result.name+ '\nemail'+result.email);
                                 }
                                
                             }
