@@ -8,7 +8,7 @@ import {
     GraphRequestManager,
     GraphRequest
   } from 'react-native-fbsdk';
-export default class Login extends Component{
+export default class login extends Component{
     constructor(props) {
         super(props);
       }
