@@ -121,7 +121,7 @@ export default class cadastro extends Component {
           headers: {'Content-Type': 'application/json'}
         });
         alert("Pet Cadastrado!");
-        this.props.navigation.navigate("Home");
+        this.props.navigation.navigate("Map");
       }
 }
 

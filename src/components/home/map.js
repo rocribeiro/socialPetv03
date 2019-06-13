@@ -22,8 +22,8 @@ export default class Map extends Component {
       pets: [],
       modalVisible: false,
       dono:{
-        nome:navigation.getParam('nome'),
-        email:navigation.getParam('email')
+        nome:null,
+        email:null
       },
       petModal:{
         nome:null,
@@ -71,7 +71,7 @@ export default class Map extends Component {
   }
   render() {
     const { region } = this.state;
-    const { navigate } = this.props.navigation;
+    //const { navigate } = this.props.navigation;
     return (
       <View style={{ flex: 1 }}>
         <MapView style={{ flex: 1 }} region={region} showsUserLocation loadingEnabled>
@@ -111,7 +111,7 @@ export default class Map extends Component {
         </Modal>
         <Container>
           <TypeTitle>Perdi Meu Pet</TypeTitle>
-          <RequestButton onPress={() => navigate('Cadastro')}>
+          <RequestButton onPress={() => this.props.navigation.navigate("Cadastro")}>
               <Image style={{height: '112%', width: '30%'}} source={require('../../img/petAlert.png')} />
           </RequestButton>
         </Container>
