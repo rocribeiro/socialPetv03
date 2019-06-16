@@ -17,19 +17,19 @@ export default class Map extends Component {
 
   constructor(props) {
     super(props);
+    const { navigation } = this.props;
+    const nome = navigation.getParam('nome', 'NO-ID');
+    const email = navigation.getParam('email', 'some default value');
+    const acessToken = navigation.getParam('acessToken', 'some default value');
     this.state = {
       region: null,
       pets: [],
       modalVisible: false,
-      dono:{
-        nome:null,
-        email:null
-      },
-      petModal:{
-        nome:null,
-        descricao:null,
-        raca:null
-      }
+        petModal:{
+          nome:null,
+          descricao:null,
+          raca:null
+        }
     };
   }
   
@@ -38,10 +38,10 @@ export default class Map extends Component {
     this.setState({ modalVisible: visible });
     this.setState({ 
       petModal:{
-        nome,
-        descricao,
-        raca
-      }
+        nome:nome,
+        descricao:descricao,
+        raca:raca,
+    }
      });
 
   }
@@ -66,7 +66,7 @@ export default class Map extends Component {
       }
     );
 
-    axios.get('http://192.168.43.134:8080/pet/')
+    axios.get('http://18.191.161.180:8080/pet/')
       .then(response => this.setState({ pets: response.data }));
   }
   render() {
@@ -100,7 +100,7 @@ export default class Map extends Component {
               <TypeTitle>Raça</TypeTitle>
               <TextModal>{this.state.petModal.raca}</TextModal>
               <TypeTitle>Contato</TypeTitle>
-              <TextModal>Email:{this.state.dono.email} </TextModal>
+              <TextModal>Email:rodrigo.ribeiro@hot </TextModal>
               <TextModal>Celular: 99289-8366</TextModal>
               <TextModal>Falar com: Rodrigo</TextModal>
               <RequestButton onPress={() => {this.setModalVisible(!this.state.modalVisible);}}>

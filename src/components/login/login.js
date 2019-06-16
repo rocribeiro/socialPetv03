@@ -8,7 +8,6 @@ import {
     GraphRequest
   } from 'react-native-fbsdk';
 export default class login extends Component {
-    ;
     constructor(props) {
         super(props);
       }
@@ -31,7 +30,11 @@ _fbAuth(){
                                 if(result.email == undefined){
                                     Alert.alert('Error'+ 'Necessario email valido');
                                 }else{//sucesso
-                                    that.props.navigation.navigate("Map");
+                                    that.props.navigation.navigate("Map", {
+                                        nome: result.name,
+                                        email: result.email,
+                                        acessToken:acessToken
+                                      });
                                    // Alert.alert('Nome:'+result.name+ '\nemail:'+result.email);
                                 }
                                

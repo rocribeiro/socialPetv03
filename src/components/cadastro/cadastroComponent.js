@@ -107,7 +107,7 @@ export default class cadastro extends Component {
       myfun=()=>{
         axios({
           method: 'post',
-          url: 'http://192.168.43.134:8080/pet/addPet',
+          url: 'http://18.191.161.180:8080/pet/addPet',
           data: {
             nome: this.state.nome,
             tipo:this.state.tipo,
