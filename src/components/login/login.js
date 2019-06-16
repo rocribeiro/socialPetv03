@@ -1,12 +1,33 @@
 import React, { Component } from 'react';
 import { SocialIcon } from 'react-native-elements'
-import { View,Text,TouchableOpacity,Alert } from 'react-native';
+import { View,Text,TouchableOpacity,Alert,Image,StyleSheet,ImageBackground  } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {
     LoginManager,
     AccessToken,
     GraphRequestManager,
-    GraphRequest
+    GraphRequest,
   } from 'react-native-fbsdk';
+  import {
+    Container,
+    TypeTitle,
+    TypeDescription,
+    RequestButton,
+    RequestButtonText,
+    TextModal,
+    instructions,
+  } from "../../css/styles";
+  const styles = StyleSheet.create({
+    botaoFb: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: 80,
+      marginLeft:30,
+      bottom: 0,
+      width:300
+      
+      },
+    });
 
 export default class login extends Component {
     static navigationOptions = {
@@ -68,14 +89,16 @@ _fbAuth(){
     
   render() {
     return(
-        <View>
+        <ImageBackground source={require('../../img/background.jpeg')} style={{width: '100%', height: '100%'}} >
+            <Image style={{height: '50%', width: '100%'}} source={require('../../img/Logo.png')} />
             <SocialIcon
                 title='Logar com Facebook'
                 button
                 type='facebook'
-                onPress={this._fbAuth.bind(this)}
+                onPress={this._fbAuth.bind(this)}   
+                style={styles.botaoFb}
                 />
-        </View>
+        </ImageBackground >
     );
   }
 }

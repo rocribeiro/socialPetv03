@@ -31,7 +31,6 @@ export const TypeDescription = styled.Text `
 `;
 
 export const RequestButton = styled.TouchableOpacity `
-  background: #ffffff;
   justify-content: center;
   align-items: center;
   height: 60px;
@@ -69,4 +68,14 @@ justifyContent: 'center';
 width: 150px
 //display: inline-block;
 //border: none;
+`;
+export const Container2 = styled.View `
+flex: 1,
+justifyContent: 'center',
+alignItems: 'center',
+backgroundColor: '#F5FCFF',
+`;
+export const instructions = styled.View `
+marginTop: 20,
+marginBottom: 20,
 `;

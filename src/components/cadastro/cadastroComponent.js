@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
-import { View,TextInput, Button,StyleSheet} from 'react-native';
+import { View,TextInput,StyleSheet,ImageBackground,Button} from 'react-native';
 import Photo from '../camera/selecaoFotos';
 import axios from 'react-native-axios';
+
 
 import {
   TypeTitle
@@ -12,20 +13,17 @@ const styles = StyleSheet.create({
   input: {
   color: 'black' ,
   backgroundColor: 'white',
-  padding: 5,
+  padding: 10,
   borderRadius: 5,
   borderWidth: 0.2,
   borderColor: 'black',
-  //alignItems: 'center',
-  //justifyContent: 'center',
-  width: 250
-  //display: inline-block,
-  //border: none,
+  width: 320
+
 
   },
   botao: {
     color: 'white' ,
-    backgroundColor: 'green',
+    backgroundColor: '#66CDAA',
     padding: 10,
     borderRadius: 1,
     borderWidth: 0.5,
@@ -33,8 +31,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: 150
-    //display: inline-block,
-    //border: none,
     },
   });
 
@@ -71,7 +67,8 @@ export default class cadastro extends Component {
   
     render() {
         return(
-            <View>
+            <ImageBackground source={require('../../img/background.jpeg')} style={{width: '100%', height: '100%'}}>
+              <View style={{margin:10,padding:10}}>
               <TypeTitle>Nome:</TypeTitle>
               <TextInput
                   value={this.state.nome}
@@ -97,20 +94,24 @@ export default class cadastro extends Component {
                 <TextInput
                   style={styles.input}
                   multiline={true}
-                  numberOfLines={4}
+                  numberOfLines={6}
                   value={this.state.descricao}
-                  onChangeText={descricao => this.setState({descricao})}
-                  placeholder="Descrição"/>
+                  />
                 <Photo/>
-                <Button style={styles.botao} onPress={this.myfun} title="Cadastrar"/>
-            </View>
+                <Button
+                  title="Cadastrar"
+                  onPress={this.myfun}
+                  color="#66CDAA"
+                />
+                </View>
+            </ImageBackground>
         );
       }
 
       myfun=()=>{
         axios({
           method: 'post',
-          url: 'http://18.191.161.180:8080/pet/addPet',
+          url: 'http://192.168.15.17:8080/pet/addPet',
           data: {
             nome: this.state.nome,
             tipo:this.state.tipo,

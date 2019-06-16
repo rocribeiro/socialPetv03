@@ -5,7 +5,7 @@ import { createAppContainer, createStackNavigator } from 'react-navigation';
 
 const Routes = createAppContainer(
     createStackNavigator({
-        Login:Login,
+        //Login:Login,
         Map: Map,
         Cadastro: Cadastro,
     })
