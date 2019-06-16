@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
-
+import { SocialIcon } from 'react-native-elements'
 import { View,Text,TouchableOpacity,Alert } from 'react-native';
 import {
     LoginManager,
@@ -8,10 +7,15 @@ import {
     GraphRequestManager,
     GraphRequest
   } from 'react-native-fbsdk';
-export default class login extends Component{
+
+export default class login extends Component {
+    static navigationOptions = {
+        header: null,
+      };
     constructor(props) {
         super(props);
       }
+      
 _fbAuth(){
     var that = this;
     LoginManager.logInWithReadPermissions(['public_profile','email']).then(function(result){
@@ -30,9 +34,12 @@ _fbAuth(){
                                 if(result.email == undefined){
                                     Alert.alert('Error'+ 'Necessario email valido');
                                 }else{//sucesso
-
-                                    that.props.navigation.navigate("Home");
-                                   // Alert.alert('Nome:'+result.name+ '\nemail'+result.email);
+                                    that.props.navigation.push("Map", {
+                                        nome: result.name,
+                                        email: result.email,
+                                        acessToken:acessToken
+                                      });
+                                   // Alert.alert('Nome:'+result.name+ '\nemail:'+result.email);
                                 }
                                
                             }
@@ -57,12 +64,17 @@ _fbAuth(){
             alert('erro:'+ error)
         })
     }
+   
+    
   render() {
     return(
         <View>
-            <TouchableOpacity onPress={this._fbAuth.bind(this)}>
-                <Text>FB login</Text>
-            </TouchableOpacity>
+            <SocialIcon
+                title='Logar com Facebook'
+                button
+                type='facebook'
+                onPress={this._fbAuth.bind(this)}
+                />
         </View>
     );
   }
