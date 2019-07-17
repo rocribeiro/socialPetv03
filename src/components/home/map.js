@@ -77,7 +77,7 @@ export default class Map extends Component {
       }
     );
 
-    axios.get('http://192.168.15.17:8080/pet/')
+    axios.get('http://18.188.159.30:8080/pet/')
       .then(response => this.setState({ pets: response.data }));
   }
   onCancel() {

@@ -41,11 +41,11 @@ export default class cadastro extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      nome:'Cão',
+      nome:'Madruguinha',
       tipo:'Cachorro',
-      raca:'Fura Saco',
+      raca:'Labrador',
       perdido:true,
-      descricao:'imsdiemdim23idm43idmi4mid4m',
+      descricao:'Ele Fugiu nessa amanhã, estava com uma roupinha amarela',
       latitudePerdido:null,
       longitudePerdido:null,
       foto:null,
@@ -55,7 +55,6 @@ export default class cadastro extends Component {
    componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       async ({ coords: { latitude, longitude } }) => {
-        alert(latitude); 
         this.setState({
           latitudePerdido:latitude,
           longitudePerdido:longitude,
@@ -111,7 +110,7 @@ export default class cadastro extends Component {
       myfun=()=>{
         axios({
           method: 'post',
-          url: 'http://192.168.15.17:8080/pet/addPet',
+          url: 'http://18.188.159.30:8080/pet/addPet',
           data: {
             nome: this.state.nome,
             tipo:this.state.tipo,
