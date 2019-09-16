@@ -4,6 +4,7 @@ import Share,{Button} from 'react-native-share';
 import MapView from "react-native-maps";
 import axios from 'react-native-axios'
 import { Marker } from 'react-native-maps';
+import Logout from '../deslogarFB/logout';
 
 import {
   Container,
@@ -146,6 +147,7 @@ export default class Map extends Component {
         </Modal>
         <Container>
           <TypeTitle>Perdi Meu Pet</TypeTitle>
+          <Logout/>
           <RequestButton onPress={() => this.props.navigation.navigate("Cadastro")}>
               <Image style={{height: '112%', width: '30%'}} source={require('../../img/petAlert.png')} />
           </RequestButton>
