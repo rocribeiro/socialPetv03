@@ -49,7 +49,10 @@ export default class cadastro extends Component {
       latitudePerdido:null,
       longitudePerdido:null,
       foto:null,
-      dono:''
+      dono:{
+        nome:'Rodrigo',
+        email:'rcr@hot.com'
+      }
     };
   }
    componentDidMount() {
@@ -63,6 +66,7 @@ export default class cadastro extends Component {
     );
    
   }
+  
   
     render() {
         return(
@@ -108,9 +112,21 @@ export default class cadastro extends Component {
       }
 
       myfun=()=>{
+        retrieveData = async () => {
+          try {
+            const value = await AsyncStorage.getItem('base64');
+            if (value !== null) {
+              this.setState({
+                foto:value,
+              });
+            }
+          } catch (error) {
+            // Error retrieving data
+          }
+        };
         axios({
           method: 'post',
-          url: 'http://18.188.159.30:8080/pet/addPet',
+          url: 'http://192.168.15.14:8080/pet/addPet',
           data: {
             nome: this.state.nome,
             tipo:this.state.tipo,
@@ -119,12 +135,20 @@ export default class cadastro extends Component {
             descricao:this.state.descricao,
             latitudePerdido:this.state.latitudePerdido,
             longitudePerdido:this.state.longitudePerdido,
-            foto: this.state.foto
+            foto: this.state.foto,
+            dono:this.state.dono
           },
           headers: {'Content-Type': 'application/json'}
+        }).then(function (response) {
+          if(response == 200){
+            alert("Pet Cadastrado!");
+            this.props.navigation.navigate("Map");
+          }else{
+            alert('Tente Novamente'+error);
+          }
+         
         });
-        alert("Pet Cadastrado!");
-        this.props.navigation.navigate("Map");
+        
       }
 }
 

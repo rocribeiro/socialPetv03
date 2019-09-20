@@ -7,7 +7,6 @@ import ImagePicker from 'react-native-image-picker';
 
 
 const options = {
-    title: 'Select Avatar',
     takePhotoButtonTitle:'Tirar Uma Foto',
     chooseFromLibraryButtonTitle:'Abrir Suas Fotos'
   };
@@ -40,16 +39,15 @@ myfun=()=>{
           });
         }
       });
+      storeData = async () => {
+        try {
+          await AsyncStorage.setItem('base64', this.state.avatarSource)
+        } catch (e) {
+          // saving error
+        }
+      }
 }
-componentDidMount(){
-  storeData = async () => {
-    try {
-      await AsyncStorage.setItem('base64', this.state.avatarSource)
-    } catch (e) {
-      // saving error
-    }
-  }
-}
+ 
 
 
   render() {
