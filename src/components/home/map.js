@@ -158,7 +158,14 @@ export default class Map extends Component {
             nomeDono:this.state.dono.nomeDono,
             emailDono: this.state.dono.emailDono
             })}>
-              <Image style={{height: '112%', width: '30%'}} source={require('../../img/petAlert.png')} />
+              <Image style={{height: '72%', width: '30%'}} source={require('../../img/petAlert.png')} />
+          </RequestButton>
+          <TypeTitle>Achei um Pet</TypeTitle>
+          <RequestButton onPress={() => this.props.navigation.navigate("Cadastro",{
+            nomeDono:this.state.dono.nomeDono,
+            emailDono: this.state.dono.emailDono
+            })}>
+              <Image style={{height: '72%', width: '30%'}} source={require('../../img/acheiPet.png')} />
           </RequestButton>
         </Container>
       </View>
