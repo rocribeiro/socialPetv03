@@ -48,7 +48,7 @@ export default class Map extends Component {
   }
   
 
-  setModalVisible(visible,nome,descricao,raca,latitudePerdido,longitudePerdido) {
+  setModalVisible(visible,nome,descricao,raca,latitudePerdido,longitudePerdido,nomeDono,emailDono,foto) {
     this.setState({ modalVisible: visible });
     this.setState({ 
       petModal:{
@@ -56,7 +56,10 @@ export default class Map extends Component {
         descricao:descricao,
         raca:raca,
         latitudePerdido:latitudePerdido,
-        longitudePerdido:longitudePerdido
+        longitudePerdido:longitudePerdido,
+        foto:foto,
+        nomeDono:nomeDono,
+        emailDono:emailDono
     }
      });
 
@@ -82,7 +85,7 @@ export default class Map extends Component {
       }
     );
 
-    axios.get('http://18.188.159.30:8080/pet/')
+    axios.get('http://192.168.15.11:8080/pet/')
       .then(response => this.setState({ pets: response.data }));
   }
   onCancel() {
@@ -95,9 +98,9 @@ export default class Map extends Component {
   }
   render() {
     let shareOptions = {
-      url: "https://www.google.com/maps/search/?api=1&query="+this.state.petModal.latitudePerdido+","+this.state.petModal.longitudePerdido,
+      title: "Alerta!!!",
       message: "Nós Ajude a Encontrar Nosso Animalzinho,Ele se chama "+this.state.petModal.nome+" é da raça "+this.state.petModal.raca+" e foi visto a ultima fez proximo",
-      social: Share.Social.WHATSAPP  
+      url: "https://www.google.com/maps/search/?api=1&query="+this.state.petModal.latitudePerdido+","+this.state.petModal.longitudePerdido,
     };
     const { region } = this.state;
     //const { navigate } = this.props.navigation;
@@ -111,7 +114,7 @@ export default class Map extends Component {
                 longitude: pet.longitudePerdido
               }}
               key={pet.id}
-              onPress={() => { this.setModalVisible(true,pet.nome,pet.descricao,pet.raca,pet.latitudePerdido,pet.longitudePerdido) }}
+              onPress={() => { this.setModalVisible(true,pet.nome,pet.descricao,pet.raca,pet.latitudePerdido,pet.longitudePerdido,pet.dono.nome,pet.dono.email,pet.foto) }}
             />
           ))}
         </MapView>
@@ -126,7 +129,8 @@ export default class Map extends Component {
             padding: 20,
           }}>        
             <View style={{flex:0.98}}>
-              <Image style={{height: '200%', width: '70%',justifyContent: 'center',alignItems: 'center'}} source={require('../../img/download.jpg')} />
+              
+              <Image style={{height: '200%', width: '70%',justifyContent: 'center',alignItems: 'center'}} source={{uri: 'data:image/gif;base64,'+this.state.petModal.foto}} />
                   <TypeTitle>Nome do Pet:</TypeTitle>
                   <TextModal>{this.state.petModal.nome}</TextModal>
                   <TypeTitle>Descrição:</TypeTitle>
@@ -134,9 +138,8 @@ export default class Map extends Component {
                   <TypeTitle>Raça</TypeTitle>
                   <TextModal>{this.state.petModal.raca}</TextModal>
                   <TypeTitle>Contato</TypeTitle>
-                  <TextModal>Email: {this.state.dono.emailDono}</TextModal>
-                  <TextModal>Celular: 99289-8366</TextModal>
-                  <TextModal>Falar com: {this.state.dono.nomeDono}</TextModal>
+                  <TextModal>Email: {this.state.petModal.emailDono}</TextModal>
+                  <TextModal>Falar com: {this.state.petModal.nomeDono}</TextModal>
                   <RequestButton onPress={() => {this.setModalVisible(!this.state.modalVisible);}}>
                     <RequestButtonText><Text style={{color: 'black'}}>Sair</Text></RequestButtonText>
                   </RequestButton>
@@ -151,8 +154,10 @@ export default class Map extends Component {
         </Modal>
         <Container>
           <TypeTitle>Perdi Meu Pet</TypeTitle>
-          <Logout/>
-          <RequestButton onPress={() => this.props.navigation.navigate("Cadastro")}>
+          <RequestButton onPress={() => this.props.navigation.navigate("Cadastro",{
+            nomeDono:this.state.dono.nomeDono,
+            emailDono: this.state.dono.emailDono
+            })}>
               <Image style={{height: '112%', width: '30%'}} source={require('../../img/petAlert.png')} />
           </RequestButton>
         </Container>

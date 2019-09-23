@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
-import { View,TextInput,StyleSheet,ImageBackground,Button} from 'react-native';
-import Photo from '../camera/selecaoFotos';
+import { View,TextInput,StyleSheet,ImageBackground,Button,Image} from 'react-native';
 import axios from 'react-native-axios';
+import ImagePicker from 'react-native-image-picker';
+
 
 
 import {
@@ -33,13 +34,20 @@ const styles = StyleSheet.create({
     width: 150
     },
   });
-
+  const options = {
+    takePhotoButtonTitle:'Tirar Uma Foto',
+    chooseFromLibraryButtonTitle:'Abrir Suas Fotos'
+  };
 export default class cadastro extends Component {
   static navigationOptions = {
     header: null,
   };
   constructor(props) {
     super(props);
+    const { navigation } = this.props;
+    const nomeDono = navigation.getParam('nomeDono', 'NO-ID');
+    const emailDono = navigation.getParam('emailDono', 'some default value');
+    const foto = navigation.getParam('base64', '');
     this.state = {
       nome:'Madruguinha',
       tipo:'Cachorro',
@@ -50,11 +58,32 @@ export default class cadastro extends Component {
       longitudePerdido:null,
       foto:null,
       dono:{
-        nome:'Rodrigo',
-        email:'rcr@hot.com'
-      }
+        nome:nomeDono,
+        email:emailDono
+      },
+     
     };
   }
+  myfun=()=>{
+    ImagePicker.showImagePicker(options, (response) => {
+        console.log('Response = ', response);
+      
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.error) {
+          console.log('ImagePicker Error: ', response.error);
+        }else {
+          const source =  response.data ;
+          console.log(source);
+          // You can also display the image using data:
+          // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+      
+          this.setState({
+            foto: source,
+          });
+        }
+      });  
+}
    componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       async ({ coords: { latitude, longitude } }) => {
@@ -100,10 +129,18 @@ export default class cadastro extends Component {
                   numberOfLines={6}
                   value={this.state.descricao}
                   />
-                <Photo/>
+                <View>
+              <View style={{marginTop:10,padding:5,width: 320}}>
+                <Button
+                  title="Selecionar Foto do Pet"
+                  onPress={this.myfun}    
+                />
+              </View>
+              <Image style={{width:50,height:50,margin:10}} source={{uri: 'data:image/gif;base64,'+this.state.foto}}/>
+            </View>
                 <Button
                   title="Cadastrar"
-                  onPress={this.myfun}
+                  onPress={this.funCadastro}
                   color="#66CDAA"
                 />
                 </View>
@@ -111,22 +148,10 @@ export default class cadastro extends Component {
         );
       }
 
-      myfun=()=>{
-        retrieveData = async () => {
-          try {
-            const value = await AsyncStorage.getItem('base64');
-            if (value !== null) {
-              this.setState({
-                foto:value,
-              });
-            }
-          } catch (error) {
-            // Error retrieving data
-          }
-        };
+      funCadastro=()=>{
         axios({
           method: 'post',
-          url: 'http://192.168.15.14:8080/pet/addPet',
+          url: 'http://192.168.15.11:8080/pet/addPet',
           data: {
             nome: this.state.nome,
             tipo:this.state.tipo,
@@ -139,15 +164,9 @@ export default class cadastro extends Component {
             dono:this.state.dono
           },
           headers: {'Content-Type': 'application/json'}
-        }).then(function (response) {
-          if(response == 200){
+        });
             alert("Pet Cadastrado!");
             this.props.navigation.navigate("Map");
-          }else{
-            alert('Tente Novamente'+error);
-          }
-         
-        });
         
       }
 }
