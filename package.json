@@ -9,6 +9,7 @@
   "dependencies": {
     "@react-native-community/async-storage": "^1.4.0",
     "react": "16.8.3",
+    "react-cloud-vision-api": "^0.3.0",
     "react-native": "0.59.8",
     "react-native-axios": "^0.17.1",
     "react-native-elements": "^1.1.0",

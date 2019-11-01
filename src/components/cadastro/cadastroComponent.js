@@ -5,7 +5,6 @@ import axios from 'react-native-axios';
 import ImagePicker from 'react-native-image-picker';
 
 
-
 import {
   TypeTitle
 } from "../../css/styles";
@@ -140,18 +139,48 @@ export default class cadastro extends Component {
             </View>
                 <Button
                   title="Cadastrar"
-                  onPress={this.funCadastro}
+                  onPress={this.reconhecePet}
                   color="#66CDAA"
                 />
                 </View>
             </ImageBackground>
         );
       }
-
-      funCadastro=()=>{
+      reconhecePet=()=>{
         axios({
           method: 'post',
-          url: 'http://3.16.23.217:8080/pet/addPet',
+          url: 'https://vision.googleapis.com/v1/images:annotate?key=AIzaSyB6cBEzNkKrb5rArVvtMkaCp4FXRDF9eDg',
+          data: {
+            "requests": [
+              {
+                "image": {
+                  "content": this.state.foto
+                },
+                "features": [
+                  {
+                    "type": "OBJECT_LOCALIZATION"
+                  }
+                ]
+              }
+            ]
+          },
+          headers: {'Content-Type': 'application/json'}
+        }).then(function (response) {
+            var obj = JSON.parse(response);
+            Object.keys(obj.localizedObjectAnnotations).array.forEach(element => {
+              alert(element.name);
+            });
+      }).catch(error => {
+          alert("erro");
+          console.log(error)
+      })
+        
+      }
+      funCadastro=()=>{
+        this.reconhecePet;
+        axios({
+          method: 'post',
+          url: 'http://3.133.104.63:8080/pet/addPet',
           data: {
             nome: this.state.nome,
             tipo:this.state.tipo,
