@@ -146,41 +146,11 @@ export default class cadastro extends Component {
             </ImageBackground>
         );
       }
-      reconhecePet=()=>{
-        axios({
-          method: 'post',
-          url: 'https://vision.googleapis.com/v1/images:annotate?key=AIzaSyB6cBEzNkKrb5rArVvtMkaCp4FXRDF9eDg',
-          data: {
-            "requests": [
-              {
-                "image": {
-                  "content": this.state.foto
-                },
-                "features": [
-                  {
-                    "type": "OBJECT_LOCALIZATION"
-                  }
-                ]
-              }
-            ]
-          },
-          headers: {'Content-Type': 'application/json'}
-        }).then(function (response) {
-            var obj = JSON.parse(response);
-            Object.keys(obj.localizedObjectAnnotations).array.forEach(element => {
-              alert(element.name);
-            });
-      }).catch(error => {
-          alert("erro");
-          console.log(error)
-      })
-        
-      }
       funCadastro=()=>{
         this.reconhecePet;
         axios({
           method: 'post',
-          url: 'http://3.133.104.63:8080/pet/addPet',
+          url: 'http://3.133.104.63:8080/pet/detect',
           data: {
             nome: this.state.nome,
             tipo:this.state.tipo,
@@ -190,12 +160,22 @@ export default class cadastro extends Component {
             latitudePerdido:this.state.latitudePerdido,
             longitudePerdido:this.state.longitudePerdido,
             foto: this.state.foto,
+            base64:this.state.foto,
             dono:this.state.dono
           },
           headers: {'Content-Type': 'application/json'}
-        });
-            alert("Pet Cadastrado!");
+        }).then(function (response) {
+            if(response == "true"){
+              alert("Pet Cadastrado!");
             this.props.navigation.navigate("Map");
+            }else{
+              alert("Coloque outra foto do seu Pet");
+            }
+          }).catch(error => {
+              alert("erro");
+              console.log(error)
+          })
+            
         
       }
 }
