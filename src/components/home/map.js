@@ -5,6 +5,7 @@ import MapView from "react-native-maps";
 import axios from 'react-native-axios'
 import { Marker } from 'react-native-maps';
 import Logout from '../deslogarFB/logout';
+import OneSignal from 'react-native-onesignal';
 
 import {
   Container,
@@ -87,6 +88,8 @@ export default class Map extends Component {
 
     axios.get('http://3.133.104.63:8080/pet/')
       .then(response => this.setState({ pets: response.data }));
+
+      OneSignal.init("cc75646d-bba9-436a-8734-af22fd56b494");
   }
   onCancel() {
     console.log("CANCEL")
