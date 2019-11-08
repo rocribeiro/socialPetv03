@@ -5,6 +5,7 @@ import axios from 'react-native-axios';
 import ImagePicker from 'react-native-image-picker';
 
 
+
 import {
   TypeTitle
 } from "../../css/styles";
@@ -100,13 +101,6 @@ export default class cadastro extends Component {
         return(
             <ImageBackground source={require('../../img/background.jpeg')} style={{width: '100%', height: '100%'}}>
               <View style={{margin:10,padding:10}}>
-              <TypeTitle>Nome:</TypeTitle>
-              <TextInput
-                  value={this.state.nome}
-                  onChangeText={nome => this.setState({nome})}
-                  placeholder="Nome"
-                  style={styles.input}
-                />
                 <TypeTitle>Tipo:</TypeTitle>
                 <TextInput
                   value={this.state.tipo}
@@ -146,13 +140,12 @@ export default class cadastro extends Component {
             </ImageBackground>
         );
       }
+
       funCadastro=()=>{
-        var that = this;
         axios({
           method: 'post',
-          url: 'http://3.133.104.63:8080/pet/detect',
+          url: 'http://192.168.15.11:8080/pet/addPet',
           data: {
-            nome: this.state.nome,
             tipo:this.state.tipo,
             raca:this.state.raca,
             perdido:this.state.perdido,
@@ -160,23 +153,12 @@ export default class cadastro extends Component {
             latitudePerdido:this.state.latitudePerdido,
             longitudePerdido:this.state.longitudePerdido,
             foto: this.state.foto,
-            base64:this.state.foto,
             dono:this.state.dono
           },
           headers: {'Content-Type': 'application/json'}
-        }).then(function (response) {
-          console.log(response);
-            if(response.data == true){
-              alert("Pet Cadastrado!");
-              that.props.navigation.navigate("Map");
-            }else{
-              alert("Coloque outra foto do seu Pet");
-            }
-          }).catch(error => {
-              alert("erro");
-              console.log(error)
-          })
-            
+        });
+            alert("Pet Cadastrado!");
+            this.props.navigation.navigate("Map");
         
       }
 }
