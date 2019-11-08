@@ -139,7 +139,7 @@ export default class cadastro extends Component {
             </View>
                 <Button
                   title="Cadastrar"
-                  onPress={this.reconhecePet}
+                  onPress={this.funCadastro}
                   color="#66CDAA"
                 />
                 </View>
@@ -147,7 +147,7 @@ export default class cadastro extends Component {
         );
       }
       funCadastro=()=>{
-        this.reconhecePet;
+        var that = this;
         axios({
           method: 'post',
           url: 'http://3.133.104.63:8080/pet/detect',
@@ -165,9 +165,10 @@ export default class cadastro extends Component {
           },
           headers: {'Content-Type': 'application/json'}
         }).then(function (response) {
-            if(response == "true"){
+          console.log(response);
+            if(response.data == true){
               alert("Pet Cadastrado!");
-            this.props.navigation.navigate("Map");
+              that.props.navigation.navigate("Map");
             }else{
               alert("Coloque outra foto do seu Pet");
             }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SocialIcon } from 'react-native-elements'
+import { SocialIcon, Button } from 'react-native-elements'
 import { View,Text,TouchableOpacity,Alert,Image,StyleSheet,ImageBackground  } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {
@@ -98,6 +98,10 @@ _fbAuth(){
                 onPress={this._fbAuth.bind(this)}   
                 style={styles.botaoFb}
                 />
+                <Button
+                onPress={this._fbAuth.bind(this)} 
+                />
+            
         </ImageBackground >
     );
   }
