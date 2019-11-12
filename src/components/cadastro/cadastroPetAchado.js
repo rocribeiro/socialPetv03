@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 
-import { View,TextInput,StyleSheet,ImageBackground,Button,Image} from 'react-native';
+import { View,TextInput,StyleSheet,ImageBackground,Button,Image,Text} from 'react-native';
 import axios from 'react-native-axios';
 import ImagePicker from 'react-native-image-picker';
 
 
-
 import {
-  TypeTitle
+  TypeTitle,
+  RequestButton,
+  RequestButtonText
 } from "../../css/styles";
 
 const styles = StyleSheet.create({
@@ -34,11 +35,12 @@ const styles = StyleSheet.create({
     width: 150
     },
   });
+  
   const options = {
     takePhotoButtonTitle:'Tirar Uma Foto',
     chooseFromLibraryButtonTitle:'Abrir Suas Fotos'
   };
-export default class cadastro extends Component {
+export default class cadastroPetAchado extends Component {
   static navigationOptions = {
     header: null,
   };
@@ -49,13 +51,12 @@ export default class cadastro extends Component {
     const emailDono = navigation.getParam('emailDono', 'some default value');
     const foto = navigation.getParam('base64', '');
     this.state = {
-      nome:'Madruguinha',
       tipo:'Cachorro',
       raca:'Labrador',
       perdido:true,
-      descricao:'Ele Fugiu nessa amanhã, estava com uma roupinha amarela',
-      latitudePerdido:null,
-      longitudePerdido:null,
+      descricao:'Achei ele proximo ao Metrô',
+      latitudeEncontrado:null,
+      longitudeEncontrado:null,
       foto:null,
       dono:{
         nome:nomeDono,
@@ -88,8 +89,8 @@ export default class cadastro extends Component {
     navigator.geolocation.getCurrentPosition(
       async ({ coords: { latitude, longitude } }) => {
         this.setState({
-          latitudePerdido:latitude,
-          longitudePerdido:longitude,
+          latitudeEncontrado:latitude,
+          longitudeEncontrado:longitude,
         });
       }
     );
@@ -136,29 +137,43 @@ export default class cadastro extends Component {
                   onPress={this.funCadastro}
                   color="#66CDAA"
                 />
+                 <RequestButton onPress={() => {this.props.navigation.pop()}}>
+                    <RequestButtonText><Text style={{color: 'black'}}>Voltar</Text></RequestButtonText>
+                  </RequestButton>
                 </View>
             </ImageBackground>
         );
       }
-
       funCadastro=()=>{
+        var that = this;
         axios({
           method: 'post',
-          url: 'http://192.168.15.11:8080/pet/addPet',
+          url: 'http://3.133.104.63:8080/pet/detect',
           data: {
             tipo:this.state.tipo,
             raca:this.state.raca,
             perdido:this.state.perdido,
             descricao:this.state.descricao,
-            latitudePerdido:this.state.latitudePerdido,
-            longitudePerdido:this.state.longitudePerdido,
+            latitudeEncontrado:this.state.latitudeEncontrado,
+            longitudeEncontrado:this.state.longitudeEncontrado,
             foto: this.state.foto,
+            base64:this.state.foto,
             dono:this.state.dono
           },
           headers: {'Content-Type': 'application/json'}
-        });
-            alert("Pet Cadastrado!");
-            this.props.navigation.navigate("Map");
+        }).then(function (response) {
+          console.log(response);
+            if(response.data == true){
+              alert("Pet Cadastrado!");
+              that.props.navigation.navigate("Map");
+            }else{
+              alert("Coloque outra foto do seu Pet");
+            }
+          }).catch(error => {
+              alert("erro");
+              console.log(error)
+          })
+            
         
       }
 }

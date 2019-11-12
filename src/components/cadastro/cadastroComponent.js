@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 
-import { View,TextInput,StyleSheet,ImageBackground,Button,Image} from 'react-native';
+import { View,TextInput,StyleSheet,ImageBackground,Button,Image,Text} from 'react-native';
 import axios from 'react-native-axios';
 import ImagePicker from 'react-native-image-picker';
 
 
 import {
-  TypeTitle
+  TypeTitle,
+  RequestButton,
+  RequestButtonText
 } from "../../css/styles";
 
 const styles = StyleSheet.create({
@@ -33,6 +35,7 @@ const styles = StyleSheet.create({
     width: 150
     },
   });
+  
   const options = {
     takePhotoButtonTitle:'Tirar Uma Foto',
     chooseFromLibraryButtonTitle:'Abrir Suas Fotos'
@@ -142,6 +145,9 @@ export default class cadastro extends Component {
                   onPress={this.funCadastro}
                   color="#66CDAA"
                 />
+                 <RequestButton onPress={() => {this.props.navigation.pop()}}>
+                    <RequestButtonText><Text style={{color: 'black'}}>Voltar</Text></RequestButtonText>
+                  </RequestButton>
                 </View>
             </ImageBackground>
         );
@@ -167,6 +173,7 @@ export default class cadastro extends Component {
         }).then(function (response) {
           console.log(response);
             if(response.data == true){
+              that.nofiticarPetPerdido();
               alert("Pet Cadastrado!");
               that.props.navigation.navigate("Map");
             }else{
@@ -178,6 +185,20 @@ export default class cadastro extends Component {
           })
             
         
+      }
+
+      nofiticarPetPerdido=()=>{
+        axios({
+          method: 'post',
+          url: 'https://onesignal.com/api/v1/notifications',
+          data: {
+              "app_id":"cc75646d-bba9-436a-8734-af22fd56b494",
+              "contents":{"en":"Um Pet acabou de se perder na sua região, Nós Ajude a encontrar."},
+              "headings":{"en":"Alerta Pet Perdido!!!"},
+              "included_segments":["All"]
+          },
+          headers: {'Authorization':'Basic ZGYyYmFiMzUtMzBjNi00YmQwLTgzMzAtZTc5YjIzM2U3NGVh','Content-Type': 'application/json'}
+        })
       }
 }
 
