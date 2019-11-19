@@ -120,13 +120,11 @@ android {
         versionName "1.0"
     }
     signingConfigs {
-        release {
-            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
-                storeFile file(MYAPP_UPLOAD_STORE_FILE)
-                storePassword MYAPP_UPLOAD_STORE_PASSWORD
-                keyAlias MYAPP_UPLOAD_KEY_ALIAS
-                keyPassword MYAPP_UPLOAD_KEY_PASSWORD
-            }
+       release {
+           storeFile file('my-release-key.keystore')
+            storePassword '123456'
+            keyAlias = 'my-key-alias'
+            keyPassword '123456'
         }
     }
     splits {
