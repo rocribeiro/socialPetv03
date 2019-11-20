@@ -51,12 +51,13 @@ export default class cadastroPetAchado extends Component {
     const emailDono = navigation.getParam('emailDono', 'some default value');
     const foto = navigation.getParam('base64', '');
     this.state = {
+      nome:'Madruguinha',
       tipo:'Cachorro',
       raca:'Labrador',
-      perdido:true,
-      descricao:'Achei ele proximo ao Metrô',
-      latitudeEncontrado:null,
-      longitudeEncontrado:null,
+      perdido:false,
+      descricao:'Ele Fugiu nessa amanhã, estava com uma roupinha amarela',
+      latitudePerdido:null,
+      longitudePerdido:null,
       foto:null,
       dono:{
         nome:nomeDono,
@@ -89,8 +90,8 @@ export default class cadastroPetAchado extends Component {
     navigator.geolocation.getCurrentPosition(
       async ({ coords: { latitude, longitude } }) => {
         this.setState({
-          latitudeEncontrado:latitude,
-          longitudeEncontrado:longitude,
+          latitudePerdido:latitude,
+          longitudePerdido:longitude,
         });
       }
     );
@@ -102,6 +103,13 @@ export default class cadastroPetAchado extends Component {
         return(
             <ImageBackground source={require('../../img/background.jpeg')} style={{width: '100%', height: '100%'}}>
               <View style={{margin:10,padding:10}}>
+              <TypeTitle>Nome:</TypeTitle>
+              <TextInput
+                  value={this.state.nome}
+                  onChangeText={nome => this.setState({nome})}
+                  placeholder="Nome"
+                  style={styles.input}
+                />
                 <TypeTitle>Tipo:</TypeTitle>
                 <TextInput
                   value={this.state.tipo}
@@ -148,14 +156,14 @@ export default class cadastroPetAchado extends Component {
         var that = this;
         axios({
           method: 'post',
-          url: 'http://3.133.104.63:8080/pet/detect',
+          url: "http://3.133.104.63:8080/pet/detect",
           data: {
             tipo:this.state.tipo,
             raca:this.state.raca,
             perdido:this.state.perdido,
             descricao:this.state.descricao,
-            latitudeEncontrado:this.state.latitudeEncontrado,
-            longitudeEncontrado:this.state.longitudeEncontrado,
+            latitudePerdido:this.state.latitudePerdido,
+            longitudePerdido:this.state.longitudePerdido,
             foto: this.state.foto,
             base64:this.state.foto,
             dono:this.state.dono

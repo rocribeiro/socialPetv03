@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { View,TextInput,StyleSheet,ImageBackground,Button,Image,Text} from 'react-native';
 import axios from 'react-native-axios';
 import ImagePicker from 'react-native-image-picker';
+import Endereco from './endereco';
 
 
 import {
@@ -102,6 +103,7 @@ export default class cadastro extends Component {
     render() {
         return(
             <ImageBackground source={require('../../img/background.jpeg')} style={{width: '100%', height: '100%'}}>
+                <Endereco/>
               <View style={{margin:10,padding:10}}>
               <TypeTitle>Nome:</TypeTitle>
               <TextInput
@@ -110,6 +112,7 @@ export default class cadastro extends Component {
                   placeholder="Nome"
                   style={styles.input}
                 />
+                
                 <TypeTitle>Tipo:</TypeTitle>
                 <TextInput
                   value={this.state.tipo}
@@ -132,14 +135,17 @@ export default class cadastro extends Component {
                   value={this.state.descricao}
                   />
                 <View>
-              <View style={{marginTop:10,padding:5,width: 320}}>
+              <View style={{marginTop:50,padding:5,width: 320}}>
                 <Button
                   title="Selecionar Foto do Pet"
                   onPress={this.myfun}    
                 />
               </View>
               <Image style={{width:50,height:50,margin:10}} source={{uri: 'data:image/gif;base64,'+this.state.foto}}/>
+              <View>
+                </View>
             </View>
+            
                 <Button
                   title="Cadastrar"
                   onPress={this.funCadastro}
@@ -156,7 +162,7 @@ export default class cadastro extends Component {
         var that = this;
         axios({
           method: 'post',
-          url: 'http://3.133.104.63:8080/pet/detect',
+          url: "http://3.133.104.63:8080/pet/detect",
           data: {
             nome: this.state.nome,
             tipo:this.state.tipo,
@@ -190,7 +196,7 @@ export default class cadastro extends Component {
       nofiticarPetPerdido=()=>{
         axios({
           method: 'post',
-          url: 'https://onesignal.com/api/v1/notifications',
+          url: "https://onesignal.com/api/v1/notifications",
           data: {
               "app_id":"cc75646d-bba9-436a-8734-af22fd56b494",
               "contents":{"en":"Um Pet acabou de se perder na sua região, Nós Ajude a encontrar."},

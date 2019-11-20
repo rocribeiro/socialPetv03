@@ -44,15 +44,13 @@ export default class Map extends Component {
           raca:null,
           perdido:null,
           latitudePerdido:null,
-          longitudePerdido:null,
-          latitudeEncontrado:null,
-          longitudeEncontrado:null,
+          longitudePerdido:null
         }
     };
   }
   
 
-  setModalVisible(visible,nome,descricao,raca,latitudePerdido,longitudePerdido,nomeDono,emailDono,foto,latitudeEncontrado,longitudeEncontrado,perdido) {
+  setModalVisible(visible,nome,descricao,raca,latitudePerdido,longitudePerdido,nomeDono,emailDono,foto) {
     this.setState({ modalVisible: visible });
     this.setState({ 
       petModal:{
@@ -63,10 +61,7 @@ export default class Map extends Component {
         longitudePerdido:longitudePerdido,
         foto:foto,
         nomeDono:nomeDono,
-        emailDono:emailDono,
-        latitudeEncontrado:latitudeEncontrado,
-        longitudeEncontrado:longitudeEncontrado,
-        perdido:perdido
+        emailDono:emailDono
     }
      });
 
@@ -112,76 +107,21 @@ export default class Map extends Component {
       url: "https://www.google.com/maps/search/?api=1&query="+this.state.petModal.latitudePerdido+","+this.state.petModal.longitudePerdido,
     };
     const { region } = this.state;
-    /*let marcador;
-    that = this;
-    if (this.state.petModal.latitudePerdido != null && this.state.petModal.latitudeEncontrado == null) {
-      marcador =  <MapView style={{ flex: 1 }} region={region} showsUserLocation loadingEnabled>
-      {this.state.pets.map(pet => (
-        <Marker
-          coordinate={{
-            latitude: pet.latitudePerdido,
-            longitude: pet.longitudePerdido
-          }}
-          key={pet.id}
-          onPress={() => { this.setModalVisible(true,pet.nome,pet.descricao,pet.raca,pet.latitudePerdido,pet.longitudePerdido,pet.dono.nome,pet.dono.email,pet.foto,pet.latitudeEncontrado,pet.longitudeEncontrado,pet.perdido) }}
-        />
-      ))};
-      </MapView>
-    } else if(this.state.petModal.latitudeEncontrado != null && this.state.petModal.latitudePerdido == null) {
-      marcador = <MapView style={{ flex: 1 }} region={region} showsUserLocation loadingEnabled>
-      {this.state.pets.map(pet => (
-        <Marker
-           pinColor="#98FB98"
-           coordinate={{
-           latitude: pet.latitudeEncontrado,
-           longitude: pet.longitudeEncontrado
-         }}
-         key={pet.id}
-         onPress={() => { this.setModalVisible(true,pet.nome,pet.descricao,pet.raca,pet.dono.nome,pet.dono.email,pet.foto,pet.latitudeEncontrado,pet.longitudeEncontrado,pet.perdido) }}
-       />
-     ))}
-   </MapView>;
-    }
-    else{
-      marcador = <MapView style={{ flex: 1 }} region={region} showsUserLocation loadingEnabled>
-      {this.state.pets.map(pet => (
-        <Marker
-          coordinate={{
-            latitude: pet.latitudePerdido,
-            longitude: pet.longitudePerdido
-          }}
-          key={pet.id}
-          onPress={() => { this.setModalVisible(true,pet.nome,pet.descricao,pet.raca,pet.latitudePerdido,pet.longitudePerdido,pet.dono.nome,pet.dono.email,pet.foto,pet.latitudeEncontrado,pet.longitudeEncontrado,pet.perdido) }}
-        />
-      ))}
-       {this.state.pets.map(pet => (
-         <Marker
-            pinColor="#98FB98"
-            coordinate={{
-            latitude: pet.latitudeEncontrado,
-            longitude: pet.longitudeEncontrado
-          }}
-          key={pet.id}
-          onPress={() => { this.setModalVisible(true,pet.nome,pet.descricao,pet.raca,pet.dono.nome,pet.dono.email,pet.foto,pet.latitudeEncontrado,pet.longitudeEncontrado,pet.perdido) }}
-        />
-      ))}
-     
-    </MapView>
-    }*/
+    //const { navigate } = this.props.navigation;
     return (
       <View style={{ flex: 1 }}>
         <MapView style={{ flex: 1 }} region={region} showsUserLocation loadingEnabled>
-      {this.state.pets.map(pet => (
-        <Marker
-          coordinate={{
-            latitude: pet.latitudePerdido,
-            longitude: pet.longitudePerdido
-          }}
-          key={pet.id}
-          onPress={() => { this.setModalVisible(true,pet.nome,pet.descricao,pet.raca,pet.latitudePerdido,pet.longitudePerdido,pet.dono.nome,pet.dono.email,pet.foto,pet.latitudeEncontrado,pet.longitudeEncontrado,pet.perdido) }}
-        />
-      ))};
-      </MapView>
+          {this.state.pets.map(pet => (
+            <MapView.Marker
+              coordinate={{
+                latitude: pet.latitudePerdido,
+                longitude: pet.longitudePerdido
+              }}
+              key={pet.id}
+              onPress={() => { this.setModalVisible(true,pet.nome,pet.descricao,pet.raca,pet.latitudePerdido,pet.longitudePerdido,pet.dono.nome,pet.dono.email,pet.foto,pet.perdido) }}
+            />
+          ))}
+        </MapView>
         <Modal
           animationType="slide"
           transparent={false}
@@ -205,7 +145,7 @@ export default class Map extends Component {
                   <TextModal>Email: {this.state.petModal.emailDono}</TextModal>
                   <TextModal>Falar com: {this.state.petModal.nomeDono}</TextModal>
                   <RequestButton onPress={() => {this.setModalVisible(!this.state.modalVisible);}}>
-                    <RequestButtonText><Text style={{color: 'black'}}>Voltar</Text></RequestButtonText>
+                    <RequestButtonText><Text style={{color: 'black'}}>Sair</Text></RequestButtonText>
                   </RequestButton>
             </View>
             <View style={{flex:0.2}}>
