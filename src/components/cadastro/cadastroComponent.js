@@ -55,6 +55,7 @@ export default class cadastro extends Component {
       tipo:'Cachorro',
       raca:'Labrador',
       perdido:true,
+      achado:false,
       descricao:'Ele Fugiu nessa amanhã, estava com uma roupinha amarela',
       latitudePerdido:null,
       longitudePerdido:null,
@@ -208,12 +209,13 @@ export default class cadastro extends Component {
         var that = this;
         axios({
           method: 'post',
-          url: "http://3.133.104.63:8080/pet/detect",
+          url: "http://18.188.48.213:8080/pet/detect",
           data: {
             nome: this.state.nome,
             tipo:this.state.tipo,
             raca:this.state.raca,
             perdido:this.state.perdido,
+            achado:this.state.achado,
             descricao:this.state.descricao,
             latitudePerdido:this.state.latitudePerdido,
             longitudePerdido:this.state.longitudePerdido,
@@ -233,7 +235,7 @@ export default class cadastro extends Component {
             }
           }).catch(error => {
               alert("erro ao cadastrar seu pet, tente novamente mais tarde!");
-              console.log(error)
+              console.log(data)
           })
             
         

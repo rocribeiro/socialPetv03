@@ -1,32 +1,45 @@
 import React, { Component } from "react";
 import { Modal, Text, View, ImageBackground, Image, BackHandler, TouchableOpacity,SafeAreaView,ScrollView } from "react-native";
-import { Left, Right, Icon } from 'native-base';
+import { Left, Right, Icon, Button } from 'native-base';
 
 export default class Menu extends Component {
+    constructor(props) {
+        super(props);
+        const { navigation } = this.props;
+        const emailDono = navigation.getParam('emailDono', 'some default value');
+        this.state={
+            pets: []
+        };
+    }
+    componentDidMount() {
+        axios.get('http://18.188.48.213:8080/pet/meusPets/'+emailDono)
+        .then(response => this.setState({ pets: response.data }));
+    }
+    petEncontrado(id){
+        axios.get('http://18.188.48.213:8080/pet/'+id);
+    }
 
     render() {
             return (
-                <SafeAreaView style={{ flex: 1 }}>
-                    <View style={{ height: 250, backgroundColor: '#d2d2d2', opacity: 0.9 }}>
-                        <View style={{ height: 200, backgroundColor: 'Green', alignItems: 'center', justifyContent: 'center' }}>
-                        </View>
-                        <View style={{ height: 50, backgroundColor: 'Green', alignItems: 'center', justifyContent: 'center' }}>
-                            <Text>John Doe</Text>
-                        </View>
-                    </View>
-                    <ScrollView>
-                    </ScrollView>
-                    <View style={{ alignItems: "center", bottom: 20 }}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <View style={{ flexDirection: 'column', marginRight: 15 }}>
-                                <Icon name="flask" style={{ fontSize: 24 }} onPress={() => console.log("Tıkladın")} />
-                            </View>
-                            <View style={{ flexDirection: 'column' }}>
-                                <Icon name="call" style={{ fontSize: 24 }} onPress={() => console.log("Tıkladın")} />
-                            </View>
-                        </View>
-                    </View>
-                </SafeAreaView>
+            <View>
+                <View>
+                {this.state.pets.map(pet => (
+                        <Text key={pet.id}>{pet.nome}</Text>
+                        
+                  ))};
+                </View>
+                <View>
+                   {this.state.pets.map(pet => (
+                        <Button 
+                        title="Achei Meu Pet"
+                        key={pet.id}
+                        onPress={() => {
+                            this.petEncontrado(pet.id);
+                        }}
+                    />     
+                    ))};
+                  </View>
+            </View>
             );
     }
 }

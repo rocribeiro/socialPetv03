@@ -16,7 +16,6 @@ import {
   RequestButtonText,
   TextModal,
 } from "../../css/styles";
-
 export default class Map extends Component {
   static navigationOptions = {
     header: null,
@@ -69,7 +68,6 @@ export default class Map extends Component {
      });
 
   }
-
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       async ({ coords: { latitude, longitude } }) => {
@@ -90,10 +88,27 @@ export default class Map extends Component {
       }
     );
 
-    axios.get('http://3.133.104.63:8080/pet/')
+    axios.get('http://18.188.48.213:8080/pet/')
       .then(response => this.setState({ pets: response.data }));
 
       OneSignal.init("cc75646d-bba9-436a-8734-af22fd56b494");
+
+     /* marcador = this.state.pets.map(function(pet) {
+        if(pet.perdido == true){
+          return (
+            <Marker
+              coordinate={{
+                latitude: pet.latitudePerdido,
+                longitude: pet.longitudePerdido
+              }}
+              key={pet.id}
+              onPress={() => { this.setModalVisible(true,pet.nome,pet.descricao,pet.raca,pet.latitudePerdido,pet.longitudePerdido,pet.dono.nome,pet.dono.email,pet.foto,pet.perdido) }}
+              pinColor= {pet.colorMarker}
+            />
+            );
+        }      
+      
+    }.bind(this));*/
   }
   onCancel() {
     console.log("CANCEL")
@@ -109,24 +124,27 @@ export default class Map extends Component {
       message: "Nós Ajude a Encontrar Nosso Animalzinho,Ele se chama "+this.state.petModal.nome+" é da raça "+this.state.petModal.raca+" e foi visto a ultima fez proximo",
       url: "https://www.google.com/maps/search/?api=1&query="+this.state.petModal.latitudePerdido+","+this.state.petModal.longitudePerdido,
     };
-    const { region } = this.state;
+    const { region,marcador } = this.state;
+    
     //const { navigate } = this.props.navigation;
     return (
       <View style={{ flex: 1 }}>
-         <TouchableHighlight  onPress={() => this.props.navigation.dispatch(DrawerActions.toggleDrawer())} style={{height: '5%', width: '10%',marginLeft: 15}}>
+         <TouchableOpacity  onPress={() => this.props.navigation.navigate("Menu",{
+                emailDono:this.state.dono.emailDono})} style={{height: '5%', width: '10%',marginLeft: 15}}>
               <Image  style={{height: '100%', width: '100%'}} source={require('../../img/menuburger.png')} />
-          </TouchableHighlight >
+          </TouchableOpacity >
         <MapView style={{ flex: 1 }} region={region} showsUserLocation loadingEnabled>
-          {this.state.pets.map(pet => (
-            <MapView.Marker
-              coordinate={{
-                latitude: pet.latitudePerdido,
-                longitude: pet.longitudePerdido
-              }}
-              key={pet.id}
-              onPress={() => { this.setModalVisible(true,pet.nome,pet.descricao,pet.raca,pet.latitudePerdido,pet.longitudePerdido,pet.dono.nome,pet.dono.email,pet.foto,pet.perdido) }}
-            />
-          ))}
+        {this.state.pets.map(pet => (
+            <Marker
+                  coordinate={{
+                    latitude: pet.latitudePerdido,
+                    longitude: pet.longitudePerdido
+                  }}
+                  key={pet.id}
+                  onPress={() => { this.setModalVisible(true,pet.nome,pet.descricao,pet.raca,pet.latitudePerdido,pet.longitudePerdido,pet.dono.nome,pet.dono.email,pet.foto,pet.perdido) }}
+                  pinColor= {pet.colorMarker}
+                />
+                ))}
         </MapView>
         <Modal
           animationType="slide"
