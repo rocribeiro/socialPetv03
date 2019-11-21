@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { View,TextInput,StyleSheet,ImageBackground,Button,Image,Text} from 'react-native';
+import { View,TextInput,StyleSheet,ImageBackground,Button,Image,Text,Modal,TouchableHighlight} from 'react-native';
 import axios from 'react-native-axios';
 import ImagePicker from 'react-native-image-picker';
 import Endereco from './endereco';
@@ -19,8 +19,7 @@ const styles = StyleSheet.create({
   padding: 10,
   borderRadius: 5,
   borderWidth: 0.2,
-  borderColor: 'black',
-  width: 320
+  borderColor: 'black'
 
 
   },
@@ -64,8 +63,13 @@ export default class cadastro extends Component {
         nome:nomeDono,
         email:emailDono
       },
+      modalVisible: false
      
     };
+  }
+
+  setModalVisible(visible) {
+    this.setState({modalVisible: visible});
   }
   myfun=()=>{
     ImagePicker.showImagePicker(options, (response) => {
@@ -98,12 +102,35 @@ export default class cadastro extends Component {
     );
    
   }
-  
+  localizacaoEndereco = (data,{geometry}) =>{
+    const {location:{lat: latitude,lng:longitude}} = geometry;
+    this.setState({
+      latitudePerdido:latitude,
+      longitudePerdido:longitude,
+    });
+    this.setModalVisible(false);
+    }
   
     render() {
         return(
             <ImageBackground source={require('../../img/background.jpeg')} style={{width: '100%', height: '100%'}}>
-                <Endereco/>
+               <Modal
+                animationType="slide"
+                transparent={false}
+                visible={this.state.modalVisible}>
+                    <Endereco
+                      localizacao = {this.localizacaoEndereco}
+                      style={{marginTop: 22}}
+                    />
+                    <View style={{marginTop:500}}>
+                    <Button
+                    title="Voltar"
+                    onPress={() => {
+                      this.setModalVisible(false);
+                    }}
+                  />
+                  </View>
+              </Modal>
               <View style={{margin:10,padding:10}}>
               <TypeTitle>Nome:</TypeTitle>
               <TextInput
@@ -127,6 +154,25 @@ export default class cadastro extends Component {
                   onChangeText={raca => this.setState({raca})}
                   placeholder="Raça"
                 />
+                <View style={{marginTop:10,padding:5}}>
+                  <TypeTitle>Onde o Pet se perdeu ?</TypeTitle>
+                  <Button
+                    title="Usar sua Localização"
+                    onPress={() => {
+                      alert("Usando sua Localização");
+                    }}   
+                  />
+                </View>
+                <View style={{marginTop:5,padding:5}} >
+                  <Button
+                    title="Inserir Endereço"
+                    onPress={() => {
+                      this.setModalVisible(true);
+                    }}
+                      
+                  />
+                
+                </View>
                 <TypeTitle>Descrição:</TypeTitle>
                 <TextInput
                   style={styles.input}
@@ -135,7 +181,7 @@ export default class cadastro extends Component {
                   value={this.state.descricao}
                   />
                 <View>
-              <View style={{marginTop:50,padding:5,width: 320}}>
+              <View style={{marginTop:20,padding:5}}>
                 <Button
                   title="Selecionar Foto do Pet"
                   onPress={this.myfun}    
@@ -151,7 +197,7 @@ export default class cadastro extends Component {
                   onPress={this.funCadastro}
                   color="#66CDAA"
                 />
-                 <RequestButton onPress={() => {this.props.navigation.pop()}}>
+                 <RequestButton onPress={() => {this.props.navigation.navigate("Map")}}>
                     <RequestButtonText><Text style={{color: 'black'}}>Voltar</Text></RequestButtonText>
                   </RequestButton>
                 </View>
@@ -186,7 +232,7 @@ export default class cadastro extends Component {
               alert("Coloque outra foto do seu Pet");
             }
           }).catch(error => {
-              alert("erro");
+              alert("erro ao cadastrar seu pet, tente novamente mais tarde!");
               console.log(error)
           })
             

@@ -4,7 +4,7 @@ import styled from "styled-components/native";
 
 export const Container = styled.View `
   background: #fff;
-  height: 140px;
+  height: 130px;
   width: 100%;
   position: absolute;
   bottom: 0;

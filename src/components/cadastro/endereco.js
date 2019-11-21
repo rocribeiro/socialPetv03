@@ -5,10 +5,11 @@ import {View} from 'react-native';
 
 export default class endereco extends Component{
     render(){
+      const {localizacao} = this.props
         return <GooglePlacesAutocomplete
             placeholder="Endereço que seu pet se perdeu"
             placeholderTextColor="#333"
-            onPress={()=>   {}}
+            onPress={localizacao}
             query={{
                 key:'AIzaSyC7eAcQS191Ov4R1a6R4MEC367Eu3jQw_4',
                 language:'pt'
@@ -22,6 +23,8 @@ export default class endereco extends Component{
 
             styles={{
                 container: {
+                  position:"absolute",
+                  top:40,
                   width: "100%"
                 },
                 textInputContainer: {

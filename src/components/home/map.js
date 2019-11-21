@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import { Modal, Text, View, ImageBackground,Image,BackHandler,TouchableOpacity} from "react-native";
+import { Modal, Text, View, ImageBackground,Image,BackHandler,TouchableOpacity,TouchableHighlight } from "react-native";
+import { DrawerActions } from 'react-navigation-drawer';
 import Share,{Button} from 'react-native-share';
 import MapView from "react-native-maps";
 import axios from 'react-native-axios'
 import { Marker } from 'react-native-maps';
 import Logout from '../deslogarFB/logout';
 import OneSignal from 'react-native-onesignal';
+import { Header } from 'react-native-elements';
 
 import {
   Container,
@@ -47,6 +49,7 @@ export default class Map extends Component {
           longitudePerdido:null
         }
     };
+  
   }
   
 
@@ -110,6 +113,9 @@ export default class Map extends Component {
     //const { navigate } = this.props.navigation;
     return (
       <View style={{ flex: 1 }}>
+         <TouchableHighlight  onPress={() => this.props.navigation.dispatch(DrawerActions.toggleDrawer())} style={{height: '5%', width: '10%',marginLeft: 15}}>
+              <Image  style={{height: '100%', width: '100%'}} source={require('../../img/menuburger.png')} />
+          </TouchableHighlight >
         <MapView style={{ flex: 1 }} region={region} showsUserLocation loadingEnabled>
           {this.state.pets.map(pet => (
             <MapView.Marker
