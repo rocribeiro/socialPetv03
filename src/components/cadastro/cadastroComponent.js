@@ -71,7 +71,7 @@ export default class cadastro extends Component {
       raca:'Labrador',
       perdido:true,
       achado:false,
-      descricao:'Ele Fugiu nessa amanhã, estava com uma roupinha amarela',
+      descricao:null,
       latitudePerdido:null,
       longitudePerdido:null,
       foto:null,
@@ -210,7 +210,7 @@ export default class cadastro extends Component {
                 <TextInput
                   style={styles.input}
                   multiline={true}
-                  numberOfLines={6}
+                  numberOfLines={2}
                   value={this.state.descricao}
                   />
                 <View>
@@ -273,8 +273,11 @@ export default class cadastro extends Component {
               alert("Coloque outra foto do seu Pet");
             }
           }).catch(error => {
-              alert("erro ao cadastrar seu pet, tente novamente mais tarde!");
-              console.log(data)
+            this.setState({
+              loading: false,
+            });
+              alert("Opss Ocorreu um erro ao cadastrar seu pet, tente novamente!");
+              console.log(error)
           })
             
         

@@ -48,19 +48,24 @@ export default class Menu extends Component {
         axios.get('http://18.188.48.213:8080/pet/meusPetsEncontrados/digo-digo5@hotmail.com')
         .then(response => this.setState({ petsEncontrados: response.data }));
     }
-    funcAtualiza(){
-        this._isMounted = true;
-        axios.get('http://18.188.48.213:8080/pet/meusPets/digo-digo5@hotmail.com')
-        .then(response => this.setState({ pets: response.data,loading :false }));
-        axios.get('http://18.188.48.213:8080/pet/meusPetsEncontrados/digo-digo5@hotmail.com')
-        .then(response => this.setState({ petsEncontrados: response.data }));
-  }
+    
     petEncontrado(id){
+        that = this;
         this.setState({
             loading: true,
           });
-        axios.get('http://18.188.48.213:8080/pet/petEncontrado/'+id)
-        .then(response => funcAtualiza());
+          axios.get('http://18.188.48.213:8080/pet/petEncontrado/'+id)
+          .then(function (response) {
+            if(response.data == true){
+                axios.get('http://18.188.48.213:8080/pet/meusPets/digo-digo5@hotmail.com')
+                .then(response => that.setState({ pets: response.data,loading :false }));
+                axios.get('http://18.188.48.213:8080/pet/meusPetsEncontrados/digo-digo5@hotmail.com')
+                .then(response => that.setState({ petsEncontrados: response.data }));
+                    }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
     }
     
     render() {
