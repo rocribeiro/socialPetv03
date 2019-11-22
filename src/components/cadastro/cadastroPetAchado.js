@@ -51,7 +51,7 @@ export default class cadastro extends Component {
     const emailDono = navigation.getParam('emailDono', 'some default value');
     const foto = navigation.getParam('base64', '');
     this.state = {
-      nome:'Madruguinha',
+      nome:'Pet Encontrado',
       tipo:'Cachorro',
       raca:'Labrador',
       perdido:true,
@@ -60,10 +60,8 @@ export default class cadastro extends Component {
       latitudePerdido:null,
       longitudePerdido:null,
       foto:null,
-      dono:{
-        nome:nomeDono,
-        email:emailDono
-      },
+      donoNome:nomeDono,
+      donoEmail:emailDono,
       modalVisible: false
      
     };
@@ -132,7 +130,14 @@ export default class cadastro extends Component {
                   />
                   </View>
               </Modal>
-              <View style={{margin:10,padding:10}}>                
+              <View style={{margin:10,padding:10}}> 
+              <TypeTitle>Nome / Apelido:</TypeTitle>
+              <TextInput
+                  value={this.state.nome}
+                  onChangeText={nome => this.setState({nome})}
+                  placeholder="Nome"
+                  style={styles.input}
+                />               
                 <TypeTitle>Tipo:</TypeTitle>
                 <TextInput
                   value={this.state.tipo}
@@ -203,6 +208,7 @@ export default class cadastro extends Component {
           method: 'post',
           url: "http://18.188.48.213:8080/pet/detect",
           data: {
+            nome:this.state.nome,
             tipo:this.state.tipo,
             raca:this.state.raca,
             perdido:this.state.perdido,
@@ -212,7 +218,8 @@ export default class cadastro extends Component {
             longitudePerdido:this.state.longitudePerdido,
             foto: this.state.foto,
             base64:this.state.foto,
-            dono:this.state.dono
+            donoNome:this.state.donoNome,
+            donoEmail:this.state.donoEmail
           },
           headers: {'Content-Type': 'application/json'}
         }).then(function (response) {

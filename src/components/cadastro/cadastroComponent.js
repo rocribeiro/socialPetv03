@@ -60,10 +60,8 @@ export default class cadastro extends Component {
       latitudePerdido:null,
       longitudePerdido:null,
       foto:null,
-      dono:{
-        nome:nomeDono,
-        email:emailDono
-      },
+      donoNome:nomeDono,
+      donoEmail:emailDono,
       modalVisible: false
      
     };
@@ -133,7 +131,7 @@ export default class cadastro extends Component {
                   </View>
               </Modal>
               <View style={{margin:10,padding:10}}>
-              <TypeTitle>Nome:</TypeTitle>
+              <TypeTitle>Nome / Apelido:</TypeTitle>
               <TextInput
                   value={this.state.nome}
                   onChangeText={nome => this.setState({nome})}
@@ -221,7 +219,8 @@ export default class cadastro extends Component {
             longitudePerdido:this.state.longitudePerdido,
             foto: this.state.foto,
             base64:this.state.foto,
-            dono:this.state.dono
+            donoNome:this.state.donoNome,
+            donoEmail:this.state.donoEmail
           },
           headers: {'Content-Type': 'application/json'}
         }).then(function (response) {

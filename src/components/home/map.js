@@ -145,7 +145,7 @@ export default class Map extends Component {
                     longitude: pet.longitudePerdido
                   }}
                   key={pet.id}
-                  onPress={() => { this.setModalVisible(true,pet.nome,pet.descricao,pet.raca,pet.latitudePerdido,pet.longitudePerdido,pet.dono.nome,pet.dono.email,pet.foto,pet.perdido) }}
+                  onPress={() => { this.setModalVisible(true,pet.nome,pet.descricao,pet.raca,pet.latitudePerdido,pet.longitudePerdido,pet.donoNome,pet.donoEmail,pet.foto,pet.perdido) }}
                   pinColor= {pet.colorMarker}
                 />
                 ))}
