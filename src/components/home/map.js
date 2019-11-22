@@ -110,6 +110,10 @@ export default class Map extends Component {
       
     }.bind(this));*/
   }
+  componentDidUpdate(){
+    axios.get('http://18.188.48.213:8080/pet/')
+      .then(response => this.setState({ pets: response.data }));
+  }
   onCancel() {
     console.log("CANCEL")
     this.setState({visible:false});
