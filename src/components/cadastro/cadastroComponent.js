@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { View,TextInput,StyleSheet,ImageBackground,Button,Image,Text,Modal,TouchableHighlight} from 'react-native';
+import { View,TextInput,StyleSheet,ImageBackground,Button,Image,Text,Modal,ActivityIndicator} from 'react-native';
 import axios from 'react-native-axios';
 import ImagePicker from 'react-native-image-picker';
 import Endereco from './endereco';
@@ -33,7 +33,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: 150
+    },modalBackground: {
+      flex: 1,
+      alignItems: 'center',
+      flexDirection: 'column',
+      justifyContent: 'space-around',
+      backgroundColor: '#00000040'
     },
+    activityIndicatorWrapper: {
+      backgroundColor: '#FFFFFF',
+      height: 100,
+      width: 100,
+      borderRadius: 10,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-around'
+    }
   });
   
   const options = {
@@ -62,7 +77,8 @@ export default class cadastro extends Component {
       foto:null,
       donoNome:nomeDono,
       donoEmail:emailDono,
-      modalVisible: false
+      modalVisible: false,
+      loading: false,
      
     };
   }
@@ -111,8 +127,26 @@ export default class cadastro extends Component {
     }
   
     render() {
+      const Loader = props => {
+        const {
+          loading,
+          ...attributes
+        } = props;
+    }
         return(
             <ImageBackground source={require('../../img/background.jpeg')} style={{width: '100%', height: '100%'}}>
+               <Modal
+                            transparent={true}
+                            animationType={'none'}
+                            visible={this.state.loading}
+                            onRequestClose={() => {console.log('close modal')}}>
+                            <View style={styles.modalBackground}>
+                                <View style={styles.activityIndicatorWrapper}>
+                                <ActivityIndicator
+                                    animating={this.state.loading} />
+                                </View>
+                            </View>
+                    </Modal>   
                <Modal
                 animationType="slide"
                 transparent={false}
@@ -204,6 +238,9 @@ export default class cadastro extends Component {
         );
       }
       funCadastro=()=>{
+        this.setState({
+          loading: true,
+        });
         var that = this;
         axios({
           method: 'post',
@@ -226,13 +263,22 @@ export default class cadastro extends Component {
         }).then(function (response) {
           console.log(response);
             if(response.data == true){
+              this.setState({
+                loading: false,
+              });
               that.nofiticarPetPerdido();
               alert("Pet Cadastrado!");
               that.props.navigation.navigate("Map");
             }else{
+              this.setState({
+                loading: false,
+              });
               alert("Coloque outra foto do seu Pet");
             }
           }).catch(error => {
+            this.setState({
+              loading: false,
+            });
               alert("erro ao cadastrar seu pet, tente novamente mais tarde!");
               console.log(data)
           })
