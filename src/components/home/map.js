@@ -1,10 +1,13 @@
 import React, { Component } from "react";
-import { Modal, Text, View, ImageBackground,Image,BackHandler,TouchableOpacity} from "react-native";
+import { Modal, Text, View, ImageBackground,Image,BackHandler,TouchableOpacity,TouchableHighlight } from "react-native";
+import { DrawerActions } from 'react-navigation-drawer';
 import Share,{Button} from 'react-native-share';
 import MapView from "react-native-maps";
 import axios from 'react-native-axios'
 import { Marker } from 'react-native-maps';
 import Logout from '../deslogarFB/logout';
+import OneSignal from 'react-native-onesignal';
+import { Header } from 'react-native-elements';
 
 import {
   Container,
@@ -13,7 +16,6 @@ import {
   RequestButtonText,
   TextModal,
 } from "../../css/styles";
-
 export default class Map extends Component {
   static navigationOptions = {
     header: null,
@@ -41,10 +43,12 @@ export default class Map extends Component {
           nome:null,
           descricao:null,
           raca:null,
+          perdido:null,
           latitudePerdido:null,
           longitudePerdido:null
         }
     };
+  
   }
   
 
@@ -64,7 +68,6 @@ export default class Map extends Component {
      });
 
   }
-
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       async ({ coords: { latitude, longitude } }) => {
@@ -85,7 +88,30 @@ export default class Map extends Component {
       }
     );
 
-    axios.get('http://3.133.104.63:8080/pet/')
+    axios.get('http://18.188.48.213:8080/pet/')
+      .then(response => this.setState({ pets: response.data }));
+
+      OneSignal.init("cc75646d-bba9-436a-8734-af22fd56b494");
+
+     /* marcador = this.state.pets.map(function(pet) {
+        if(pet.perdido == true){
+          return (
+            <Marker
+              coordinate={{
+                latitude: pet.latitudePerdido,
+                longitude: pet.longitudePerdido
+              }}
+              key={pet.id}
+              onPress={() => { this.setModalVisible(true,pet.nome,pet.descricao,pet.raca,pet.latitudePerdido,pet.longitudePerdido,pet.dono.nome,pet.dono.email,pet.foto,pet.perdido) }}
+              pinColor= {pet.colorMarker}
+            />
+            );
+        }      
+      
+    }.bind(this));*/
+  }
+  componentDidUpdate(){
+    axios.get('http://18.188.48.213:8080/pet/')
       .then(response => this.setState({ pets: response.data }));
   }
   onCancel() {
@@ -102,21 +128,27 @@ export default class Map extends Component {
       message: "Nós Ajude a Encontrar Nosso Animalzinho,Ele se chama "+this.state.petModal.nome+" é da raça "+this.state.petModal.raca+" e foi visto a ultima fez proximo",
       url: "https://www.google.com/maps/search/?api=1&query="+this.state.petModal.latitudePerdido+","+this.state.petModal.longitudePerdido,
     };
-    const { region } = this.state;
+    const { region,marcador } = this.state;
+    
     //const { navigate } = this.props.navigation;
     return (
       <View style={{ flex: 1 }}>
+         <TouchableOpacity  onPress={() => this.props.navigation.navigate("Menu",{
+                emailDono:this.state.dono.emailDono})} style={{height: '5%', width: '10%',marginLeft: 15}}>
+              <Image  style={{height: '100%', width: '100%'}} source={require('../../img/menuburger.png')} />
+          </TouchableOpacity >
         <MapView style={{ flex: 1 }} region={region} showsUserLocation loadingEnabled>
-          {this.state.pets.map(pet => (
-            <MapView.Marker
-              coordinate={{
-                latitude: pet.latitudePerdido,
-                longitude: pet.longitudePerdido
-              }}
-              key={pet.id}
-              onPress={() => { this.setModalVisible(true,pet.nome,pet.descricao,pet.raca,pet.latitudePerdido,pet.longitudePerdido,pet.dono.nome,pet.dono.email,pet.foto) }}
-            />
-          ))}
+        {this.state.pets.map(pet => (
+            <Marker
+                  coordinate={{
+                    latitude: pet.latitudePerdido,
+                    longitude: pet.longitudePerdido
+                  }}
+                  key={pet.id}
+                  onPress={() => { this.setModalVisible(true,pet.nome,pet.descricao,pet.raca,pet.latitudePerdido,pet.longitudePerdido,pet.donoNome,pet.donoEmail,pet.foto,pet.perdido) }}
+                  pinColor= {pet.colorMarker}
+                />
+                ))}
         </MapView>
         <Modal
           animationType="slide"
@@ -153,20 +185,26 @@ export default class Map extends Component {
           </ImageBackground>
         </Modal>
         <Container>
-          <TypeTitle>Perdi Meu Pet</TypeTitle>
-          <RequestButton onPress={() => this.props.navigation.navigate("Cadastro",{
-            nomeDono:this.state.dono.nomeDono,
-            emailDono: this.state.dono.emailDono
-            })}>
-              <Image style={{height: '72%', width: '30%'}} source={require('../../img/petAlert.png')} />
-          </RequestButton>
-          <TypeTitle>Achei um Pet</TypeTitle>
-          <RequestButton onPress={() => this.props.navigation.navigate("Cadastro",{
-            nomeDono:this.state.dono.nomeDono,
-            emailDono: this.state.dono.emailDono
-            })}>
-              <Image style={{height: '72%', width: '30%'}} source={require('../../img/acheiPet.png')} />
-          </RequestButton>
+          <View style={{flex:1,flexDirection:'row',justifyContent:'space-around'}}>                                                                                           
+            <View style={{height:100}}>
+              <TypeTitle style={{marginRight:100}}>Perdi Meu Pet</TypeTitle>
+              <RequestButton onPress={() => this.props.navigation.navigate("Cadastro",{
+                nomeDono:this.state.dono.nomeDono,
+                emailDono: this.state.dono.emailDono
+                })}>
+                  <Image style={{height: '80%', width: '30%',marginRight:100}} source={require('../../img/petAlert.png')} />
+              </RequestButton>
+            </View>
+            <View style={{height:100}}>
+              <TypeTitle >Achei um Pet</TypeTitle>
+              <RequestButton onPress={() => this.props.navigation.navigate("cadastroPetAchado",{
+                nomeDono:this.state.dono.nomeDono,
+                emailDono: this.state.dono.emailDono
+                })}>
+                  <Image style={{height: '100%', width: '50%'}} source={require('../../img/acheiPet.png')} />
+              </RequestButton>
+            </View>
+          </View>
         </Container>
       </View>
     );

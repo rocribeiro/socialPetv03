@@ -98,9 +98,6 @@ _fbAuth(){
                 onPress={this._fbAuth.bind(this)}   
                 style={styles.botaoFb}
                 />
-                <Button
-                onPress={this._fbAuth.bind(this)} 
-                />
             
         </ImageBackground >
     );
