@@ -28,6 +28,7 @@ import {
   
 
 export default class Menu extends Component {
+    _isMounted = false;
     constructor(props) {
         super(props);
         const { navigation } = this.props;
@@ -41,12 +42,14 @@ export default class Menu extends Component {
         
     }
     componentDidMount() {
+        this._isMounted = true;
         axios.get('http://18.188.48.213:8080/pet/meusPets/digo-digo5@hotmail.com')
         .then(response => this.setState({ pets: response.data,loading :false}));
         axios.get('http://18.188.48.213:8080/pet/meusPetsEncontrados/digo-digo5@hotmail.com')
         .then(response => this.setState({ petsEncontrados: response.data }));
     }
-    componentDidUpdate(){
+    funcAtualiza(){
+        this._isMounted = true;
         axios.get('http://18.188.48.213:8080/pet/meusPets/digo-digo5@hotmail.com')
         .then(response => this.setState({ pets: response.data,loading :false }));
         axios.get('http://18.188.48.213:8080/pet/meusPetsEncontrados/digo-digo5@hotmail.com')
@@ -57,7 +60,7 @@ export default class Menu extends Component {
             loading: true,
           });
         axios.get('http://18.188.48.213:8080/pet/petEncontrado/'+id)
-        .then(response => componentDidUpdate());
+        .then(response => funcAtualiza());
     }
     
     render() {

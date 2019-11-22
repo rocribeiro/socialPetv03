@@ -22,7 +22,7 @@ import {
       alignItems: 'center',
       justifyContent: 'center',
       marginTop: 80,
-      marginLeft:30,
+      marginLeft:45,
       bottom: 0,
       width:300
       
@@ -30,6 +30,7 @@ import {
     });
 
 export default class login extends Component {
+    
     static navigationOptions = {
         header: null,
       };

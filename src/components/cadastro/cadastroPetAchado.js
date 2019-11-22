@@ -262,9 +262,6 @@ export default class cadastro extends Component {
           headers: {'Content-Type': 'application/json'}
         }).then(function (response) {
           console.log(response);
-          this.setState({
-            loading: false,
-          });
             if(response.data == true){
               alert("Pet Cadastrado!");
               that.props.navigation.navigate("Map");
@@ -272,9 +269,6 @@ export default class cadastro extends Component {
               alert("Coloque outra foto do seu Pet");
             }
           }).catch(error => {
-            this.setState({
-              loading: false,
-            });
               alert("erro ao cadastrar seu pet, tente novamente mais tarde!");
               console.log(error)
           })

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { View,TextInput,StyleSheet,ImageBackground,Button,Image,Text,Modal,ActivityIndicator} from 'react-native';
+import { View,TextInput,StyleSheet,ImageBackground,Button,Image,Text,Modal,ActivityIndicator,BackHandler} from 'react-native';
 import axios from 'react-native-axios';
 import ImagePicker from 'react-native-image-picker';
 import Endereco from './endereco';
@@ -261,11 +261,8 @@ export default class cadastro extends Component {
           },
           headers: {'Content-Type': 'application/json'}
         }).then(function (response) {
-          console.log(response);
+             console.log(response.data);
             if(response.data == true){
-              this.setState({
-                loading: false,
-              });
               that.nofiticarPetPerdido();
               alert("Pet Cadastrado!");
               that.props.navigation.navigate("Map");
@@ -276,9 +273,6 @@ export default class cadastro extends Component {
               alert("Coloque outra foto do seu Pet");
             }
           }).catch(error => {
-            this.setState({
-              loading: false,
-            });
               alert("erro ao cadastrar seu pet, tente novamente mais tarde!");
               console.log(data)
           })

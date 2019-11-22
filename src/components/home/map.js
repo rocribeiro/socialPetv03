@@ -20,9 +20,6 @@ export default class Map extends Component {
   static navigationOptions = {
     header: null,
   };
-  componentWillMount() {
-    BackHandler.addEventListener('hardwareBackPress', () => { return true; });
-  }
 
   constructor(props) {
     super(props);
@@ -52,7 +49,7 @@ export default class Map extends Component {
   }
   
 
-  setModalVisible(visible,nome,descricao,raca,latitudePerdido,longitudePerdido,nomeDono,emailDono,foto) {
+  setModalVisible(visible,nome,descricao,raca,latitudePerdido,longitudePerdido,nomeDono,emailDono,foto,perdido,achado) {
     this.setState({ modalVisible: visible });
     this.setState({ 
       petModal:{
@@ -63,20 +60,24 @@ export default class Map extends Component {
         longitudePerdido:longitudePerdido,
         foto:foto,
         nomeDono:nomeDono,
-        emailDono:emailDono
+        emailDono:emailDono,
+        perdido:perdido,
+        achado:achado
     }
      });
 
   }
+
   componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', () => { return true; });
     navigator.geolocation.getCurrentPosition(
       async ({ coords: { latitude, longitude } }) => {
         this.setState({
           region: {
             latitude,
             longitude,
-            latitudeDelta: 0.001,
-            longitudeDelta: 0.001
+            latitudeDelta: 0.0043,
+            longitudeDelta: 0.0034
           }
         });
       }, //sucesso
@@ -93,22 +94,6 @@ export default class Map extends Component {
 
       OneSignal.init("cc75646d-bba9-436a-8734-af22fd56b494");
 
-     /* marcador = this.state.pets.map(function(pet) {
-        if(pet.perdido == true){
-          return (
-            <Marker
-              coordinate={{
-                latitude: pet.latitudePerdido,
-                longitude: pet.longitudePerdido
-              }}
-              key={pet.id}
-              onPress={() => { this.setModalVisible(true,pet.nome,pet.descricao,pet.raca,pet.latitudePerdido,pet.longitudePerdido,pet.dono.nome,pet.dono.email,pet.foto,pet.perdido) }}
-              pinColor= {pet.colorMarker}
-            />
-            );
-        }      
-      
-    }.bind(this));*/
   }
   componentDidUpdate(){
     axios.get('http://18.188.48.213:8080/pet/')
@@ -128,6 +113,11 @@ export default class Map extends Component {
       message: "Nós Ajude a Encontrar Nosso Animalzinho,Ele se chama "+this.state.petModal.nome+" é da raça "+this.state.petModal.raca+" e foi visto a ultima fez proximo",
       url: "https://www.google.com/maps/search/?api=1&query="+this.state.petModal.latitudePerdido+","+this.state.petModal.longitudePerdido,
     };
+    let shareOptions2 = {
+      title: "Alerta!!!",
+      message: "Acabei de encontrar um Animazinho ele é da raça "+this.state.petModal.raca+" e foi encontrado no seguinte local.",
+      url: "https://www.google.com/maps/search/?api=1&query="+this.state.petModal.latitudePerdido+","+this.state.petModal.longitudePerdido,
+    };
     const { region,marcador } = this.state;
     
     //const { navigate } = this.props.navigation;
@@ -145,7 +135,7 @@ export default class Map extends Component {
                     longitude: pet.longitudePerdido
                   }}
                   key={pet.id}
-                  onPress={() => { this.setModalVisible(true,pet.nome,pet.descricao,pet.raca,pet.latitudePerdido,pet.longitudePerdido,pet.donoNome,pet.donoEmail,pet.foto,pet.perdido) }}
+                  onPress={() => { this.setModalVisible(true,pet.nome,pet.descricao,pet.raca,pet.latitudePerdido,pet.longitudePerdido,pet.donoNome,pet.donoEmail,pet.foto,pet.perdido,pet.achado) }}
                   pinColor= {pet.colorMarker}
                 />
                 ))}
@@ -177,7 +167,13 @@ export default class Map extends Component {
                   </RequestButton>
             </View>
             <View style={{flex:0.2}}>
-            <TouchableOpacity onPress={()=>{Share.open(shareOptions);}}>
+            <TouchableOpacity onPress={()=>{
+              if(this.state.petModal.achado ==true){
+                Share.open(shareOptions2);
+              }else{
+                Share.open(shareOptions);
+              }
+              }}>
               <Image style={{height: '107%', width: '117%'}}  source={require('../../img/share.png')} />
             </TouchableOpacity>
             </View>
