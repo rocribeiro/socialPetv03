@@ -43,9 +43,9 @@ export default class Menu extends Component {
     }
     componentDidMount() {
         this._isMounted = true;
-        axios.get('http://18.188.48.213:8080/pet/meusPets/digo-digo5@hotmail.com')
+        axios.get('http://18.188.48.213:8080/pet/meusPets/'+this.state.emailDono)
         .then(response => this.setState({ pets: response.data,loading :false}));
-        axios.get('http://18.188.48.213:8080/pet/meusPetsEncontrados/digo-digo5@hotmail.com')
+        axios.get('http://18.188.48.213:8080/pet/meusPetsEncontrados/'+this.state.emailDono)
         .then(response => this.setState({ petsEncontrados: response.data }));
     }
     
@@ -57,9 +57,9 @@ export default class Menu extends Component {
           axios.get('http://18.188.48.213:8080/pet/petEncontrado/'+id)
           .then(function (response) {
             if(response.data == true){
-                axios.get('http://18.188.48.213:8080/pet/meusPets/digo-digo5@hotmail.com')
+                axios.get('http://18.188.48.213:8080/pet/meusPets/'+that.state.emailDono)
                 .then(response => that.setState({ pets: response.data,loading :false }));
-                axios.get('http://18.188.48.213:8080/pet/meusPetsEncontrados/digo-digo5@hotmail.com')
+                axios.get('http://18.188.48.213:8080/pet/meusPetsEncontrados/'+that.state.emailDono)
                 .then(response => that.setState({ petsEncontrados: response.data }));
                     }
           })
