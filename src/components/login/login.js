@@ -92,7 +92,7 @@ _fbAuth(){
         <ImageBackground source={require('../../img/background.jpeg')} style={{width: '100%', height: '100%'}} >
             <Image style={{height: '50%', width: '100%'}} source={require('../../img/Logo.png')} />
             <SocialIcon
-                title='Logar com Facebook'
+                title='Logar com'
                 button
                 type='facebook'
                 onPress={this._fbAuth.bind(this)}   
